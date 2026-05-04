@@ -1,209 +1,165 @@
-import React, { useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { bookService } from "../../../redux/reducers/bookingReducer";
 
 function BookingPage() {
-  const dispatch = useDispatch()
-  const location = useLocation();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const service = location.state;
 
-  const bookingInfo = useSelector((state) => state.booking.bookingInfo);
-  console.log("Booking info:", bookingInfo);
+  // service from localStorage
+  const service = JSON.parse(localStorage.getItem("booking"));
 
+  const user = JSON.parse(localStorage.getItem("user"));
+  const userId = user?._id;
 
-  const user = JSON.parse(localStorage.getItem('user'))
-  const userId = user._id;
-
-  // Location State
   const [deliveryLocation, setDeliveryLocation] = useState("");
   const [locationConfirmed, setLocationConfirmed] = useState(false);
 
-  // Payment Method State
-  const [paymentMethod, setPaymentMethod] = useState("advanced");
-
-  // Simulating profile location (login করলে আসবে)
   const profileData = JSON.parse(localStorage.getItem("profileData"));
-  const profileLocation = profileData.location;
-
-
-
-
-  if (!service) {
-    return (
-      <div className="text-center mt-20">
-        <h2 className="text-xl font-semibold text-gray-700">
-          No booking data found.
-        </h2>
-      </div>
-    );
-  }
+  const profileLocation = profileData?.location;
 
   const handleGetProfileLocation = () => {
-    setDeliveryLocation(profileLocation);
+    setDeliveryLocation(profileLocation || "");
     setLocationConfirmed(true);
   };
 
   const handleConfirmLocation = () => {
-    if (deliveryLocation.trim() !== "") {
+    if (deliveryLocation.trim()) {
       setLocationConfirmed(true);
     }
   };
 
-  const handleConfirmBooking = () => {
+  const handleConfirmBooking = async () => {
     const bookingData = {
       userId,
-      serviceId: service._id,
-      serviceName: service.title,
-      serviceType: service.category,
+      serviceId: service.serviceId,
+      serviceName: service.name,
       price: service.price,
-      deliveryLocation,
-      paymentMethod,
+      deliveryLocation: deliveryLocation,
+      serviceType: service.serviceType
     };
 
-    dispatch(bookService(bookingData)).unwrap()
+    try {
+      const res = await dispatch(bookService(bookingData)).unwrap();
 
-    navigate("/success", { state: bookingInfo });
+      navigate("/success", {
+        state: res,
+      });
+    } catch (err) {
+      console.log("Booking error:", err);
+    }
   };
+
+  if (!service) {
+    return (
+      <div className="text-center mt-20 text-gray-600">
+        No booking data found
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-4xl mx-auto mt-20 p-6 space-y-8">
-      <h2 className="text-2xl font-bold text-gray-800 mb-2">Booking Details</h2>
 
-      {/* ============ ROW 1: Service Summary + Location ============ */}
+      <h2 className="text-2xl font-bold text-gray-800">
+        Booking Details
+      </h2>
+
       <div className="grid md:grid-cols-2 gap-6">
-        {/* Service Summary */}
-        <div className="p-4 space-y-3">
-          <h3 className="text-lg font-semibold text-gray-800 mb-2">
+
+        {/* LEFT - SERVICE INFO */}
+        <div className="space-y-4">
+
+          <h3 className="text-lg font-semibold">
             Service Summary
           </h3>
-          <div className="flex justify-between">
-            <span className="font-semibold text-gray-600">Service:</span>
+
+          <div className="flex justify-between text-sm">
+            <span>Service</span>
             <span>{service.name}</span>
           </div>
-          <div className="flex justify-between">
-            <span className="font-semibold text-gray-600">Type:</span>
-            <span>{service.service}</span>
-          </div>
-          <div className="flex justify-between">
-            <span className="font-semibold text-gray-600">Price:</span>
+
+          <div className="flex justify-between text-sm">
+            <span>Price</span>
             <span>৳ {service.price}</span>
           </div>
 
-          <div className="flex justify-between">
-            <span className="font-semibold text-gray-600">Total:</span>
-            <span className="font-bold text-gray-800">৳ {service.price}</span>
+          <div className="flex justify-between text-sm">
+            <span>Location</span>
+            <span>{service.location}</span>
           </div>
+
+          {/* PROVIDER SECTION */}
+          <div className="flex items-center gap-3 pt-4">
+
+            <img
+              src={service.provider?.avatar || "/user.png"}
+              className="w-10 h-10 rounded-full object-cover"
+              alt="provider"
+            />
+
+            <div>
+              <p className="text-sm font-medium text-gray-800">
+                {service.provider?.name}
+              </p>
+              <p className="text-xs text-gray-500">
+                {service.provider?.email}
+              </p>
+            </div>
+
+          </div>
+
         </div>
 
-        {/* Location */}
-        <div className="p-4">
-          <h3 className="text-lg font-semibold text-gray-800 mb-2">
+        {/* RIGHT - LOCATION */}
+        <div>
+
+          <h3 className="text-lg font-semibold mb-2">
             Delivery Location
           </h3>
+
           <input
             type="text"
-            placeholder="Enter delivery location"
             value={deliveryLocation}
             onChange={(e) => {
               setDeliveryLocation(e.target.value);
               setLocationConfirmed(false);
             }}
-            className="w-full border rounded px-3 py-2 mb-3 focus:ring focus:ring-violet-200 outline-none"
+            placeholder="Enter delivery location"
+            className="w-full p-2 border rounded-md text-sm"
           />
 
-          {deliveryLocation.trim() !== "" && !locationConfirmed && (
+          {deliveryLocation && !locationConfirmed && (
             <button
-              type="button"
               onClick={handleConfirmLocation}
-              className="w-full mb-3 bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition"
+              className="w-full mt-3 bg-green-600 text-white py-2 rounded-md"
             >
               Confirm Location
             </button>
           )}
 
           <button
-            type="button"
             onClick={handleGetProfileLocation}
-            className="w-full bg-violet-600 text-white py-2 rounded-md hover:bg-violet-700 transition"
+            className="w-full mt-2 bg-violet-600 text-white py-2 rounded-md"
           >
-            Get Profile Location
+            Use Profile Location
           </button>
-        </div>
-      </div>
 
-      {/* ================= Payment Method ================= */}
-      <div className="p-4">
-        <h3 className="text-lg font-semibold text-gray-800 mb-4">
-          Payment Method
-        </h3>
-
-        <div className="flex flex-wrap gap-6">
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="radio"
-              name="payment"
-              value="advanced"
-              checked={paymentMethod === "advanced"}
-              onChange={(e) => setPaymentMethod(e.target.value)}
-              className="accent-violet-600"
-            />
-            <span className="font-medium text-gray-700">
-              Advanced (Online)
-            </span>
-          </label>
-
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="radio"
-              name="payment"
-              value="cash"
-              checked={paymentMethod === "cash"}
-              onChange={(e) => setPaymentMethod(e.target.value)}
-              className="accent-violet-600"
-            />
-            <span className="font-medium text-gray-700">
-              Cash on Delivery
-            </span>
-          </label>
         </div>
 
-        {paymentMethod === "advanced" && (
-          <div className="grid grid-cols-3 gap-4 mt-4">
-            <div className="flex flex-col items-center cursor-pointer border rounded-md px-2 py-4 hover:scale-105 transition">
-              <img
-                src="https://download.logo.wine/logo/BKash/BKash-Logo.wine.png"
-                alt="Bkash"
-                className="h-8 object-contain"
-              />
-            </div>
-            <div className="flex flex-col items-center cursor-pointer border rounded-md px-2 py-4 hover:scale-105 transition">
-              <img
-                src="https://seeklogo.com/images/N/nagad-logo-7A6852A5B9-seeklogo.com.png"
-                alt="Nagad"
-                className="h-8 object-contain"
-              />
-            </div>
-            <div className="flex flex-col items-center cursor-pointer border rounded-md px-2 py-4 hover:scale-105 transition">
-              <img
-                src="https://upload.wikimedia.org/wikipedia/en/2/20/Rocket_logo.svg"
-                alt="Rocket"
-                className="h-8 object-contain"
-              />
-            </div>
-          </div>
-        )}
       </div>
 
+      {/* CONFIRM BUTTON */}
       <div className="flex justify-end">
         <button
           onClick={handleConfirmBooking}
-          className="px-8 py-3 bg-violet-600 text-white rounded-md font-semibold hover:bg-violet-500 transition"
+          className="px-6 py-3 bg-black text-white rounded-md hover:opacity-80"
         >
           Confirm Booking
         </button>
       </div>
+
     </div>
   );
 }

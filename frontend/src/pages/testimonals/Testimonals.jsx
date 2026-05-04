@@ -1,3 +1,4 @@
+import { User } from "lucide-react";
 import React from "react";
 import { FaStar, FaRegStar } from "react-icons/fa";
 
@@ -6,28 +7,28 @@ function Testimonials() {
     {
       id: 1,
       name: "John Doe",
-      img: "https://i.pravatar.cc/150?img=1",
+      img: <User />,
       rating: 5,
       review: "Excellent service! Highly recommended.",
     },
     {
       id: 2,
       name: "Jane Smith",
-      img: "https://i.pravatar.cc/150?img=2",
+      img: <User />,
       rating: 4,
       review: "Quick response and professional work.",
     },
     {
       id: 3,
       name: "Michael Johnson",
-      img: "https://i.pravatar.cc/150?img=3",
+      img: <User />,
       rating: 5,
       review: "Very knowledgeable and patient.",
     },
     {
       id: 4,
       name: "Sara Williams",
-      img: "https://i.pravatar.cc/150?img=4",
+      img: <User />,
       rating: 5,
       review: "Amazing experience, will use again!",
     },
@@ -53,14 +54,13 @@ function Testimonials() {
         {testimonials.map((t) => (
           <div
             key={t.id}
-            className="bg-white shadow-lg rounded-2xl p-6 flex flex-col items-center text-center hover:shadow-2xl transition duration-300"
+            className=" rounded-2xl p-6 flex flex-col items-center text-center hover:shadow-2xl transition duration-300"
           >
             {/* Profile Image */}
-            <img
-              src={t.img}
-              alt={t.name}
-              className="w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover mb-4"
-            />
+
+            <span className="w-20 h-20 sm:w-24 sm:h-24 bg-yellow-100 rounded-full flex items-center justify-center mb-4 text-2xl">
+              {t.img}
+            </span>
 
             {/* Name */}
             <h2 className="text-lg sm:text-xl font-semibold mb-1">{t.name}</h2>

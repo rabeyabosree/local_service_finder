@@ -8,7 +8,7 @@ function ProviderBookings() {
   const navigate = useNavigate();
   const dispatch = useDispatch()
 
-   const { bookings = [], error} = useSelector((state) => state.booking)
+   const { providerBookings  = [], error} = useSelector((state) => state.booking)
 
   useEffect(() => {
       dispatch(getAllBookings())
@@ -16,6 +16,7 @@ function ProviderBookings() {
   
  
   const [filter, setFilter] = useState("All");
+  console.log(providerBookings )
 
  
   // Status update handler
@@ -26,8 +27,8 @@ function ProviderBookings() {
   // Filtered bookings based on filter state
   const filteredBookings =
     filter === "All"
-      ? bookings
-      : bookings.filter((b) => b.status.toLowerCase() === filter.toLowerCase());
+      ? providerBookings 
+      : providerBookings .filter((b) => b.status.toLowerCase() === filter.toLowerCase());
 
   return (
     <div>

@@ -14,7 +14,7 @@ function ProviderProfile() {
     const profileInfo = async () => {
       try {
         const res = await dispatch(authProfile()).unwrap();
-        setProvider(res.user); // ধরো backend থেকে { user: {...} } আসছে
+        setProvider(res.user);
       } catch (err) {
         console.error("Profile fetch failed:", err);
       }

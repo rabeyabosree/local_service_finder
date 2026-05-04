@@ -27,6 +27,8 @@ import AddServices from './protectedPages/provider/dashboard/AddServices';
 import AuthCustomer from './pages/auth/AuthCustomer';
 import ContactPage from './pages/contact/ContactPage';
 import AllServices from './pages/services/AllServices';
+import ChatPage from './pages/chating/ChatPage';
+import Chatlist from './pages/chating/Chatlist';
 
 
 function App() {
@@ -47,6 +49,9 @@ function App() {
         <Route path='/reset-password' element={<ResetPassword />} />
 
         <Route path='/contact' element={<ContactPage />} />
+        <Route path='/message' element={<Chatlist />} />
+
+
 
 
 

@@ -4,7 +4,7 @@ import axios from "axios";
 // Initial State
 const initialState = {
     customerBooking: [],
-    providerBookings: null,
+    providerBookings: [],
     bookings: [],
     bookingInfo: null,
     loading: false,
@@ -112,7 +112,7 @@ export const providerBooking = createAsyncThunk(
                         Authorization: `Bearer ${token}`,
                     },
                 });
-           
+
             return data;
         } catch (error) {
             return rejectWithValue(
@@ -124,11 +124,24 @@ export const providerBooking = createAsyncThunk(
 
 
 
-//  Auth Slice
-const authSlice = createSlice({
+//  booking Slice
+const bookingSlice = createSlice({
     name: "booking",
     initialState,
-    reducers: {},
+    reducers: {
+        addBooking: (state, action) => {
+            const data = action.payload;
+
+            const exists = state.bookings.find(
+                (b) => b._id === data._id
+            );
+
+            if (!exists) {
+                state.bookings.push(data);
+            }
+            localStorage.setItem('booking', JSON.stringify(data))
+        }
+    },
     extraReducers: (builder) => {
         // book
         builder
@@ -150,7 +163,6 @@ const authSlice = createSlice({
                 state.error = null;
             })
             .addCase(updateStatuss.fulfilled, (state, action) => {
-                // যদি তুমি পুরো list update করতে চাও, তাহলে আগে state.bookings কে map করে update করতে হবে
                 const updatedBooking = action.payload.booking;
                 state.bookings = state.bookings.map(b =>
                     b._id === updatedBooking._id ? updatedBooking : b
@@ -169,7 +181,19 @@ const authSlice = createSlice({
             .addCase(getAllBookings.fulfilled, (state, action) => {
                 state.loading = false;
                 state.message = action.payload.message;
-                state.bookings = action.payload.bookings;
+
+                const { role } = action.meta.arg; // 👈 token থেকে pass করা role
+                const bookings = action.payload.bookings;
+
+                if (role === "customer") {
+                    state.customerBooking = bookings;
+                }
+                else if (role === "provider") {
+                    state.providerBookings = bookings;
+                }
+                else {
+                    state.bookings = bookings; // admin
+                }
             })
             .addCase(getAllBookings.rejected, (state, action) => {
                 state.loading = false;
@@ -206,5 +230,5 @@ const authSlice = createSlice({
     }
 });
 
-
-export default authSlice.reducer;
+export const { addBooking } = bookingSlice.actions;
+export default bookingSlice.reducer;

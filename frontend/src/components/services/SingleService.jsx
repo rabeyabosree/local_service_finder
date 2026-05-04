@@ -1,118 +1,214 @@
 import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { FaStar } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSingleService } from "../../redux/reducers/serviceReducer";
-import AddTestimonals from "../../protectedPages/customer/review/AddTestimonals";
 import { fetchTestimonials } from "../../redux/reducers/testimonalReducer";
+import { createConversation } from "../../redux/reducers/chatReducer";
+import AddTestimonals from "../../protectedPages/customer/review/AddTestimonals";
+
+
+import {
+  Star,
+  MapPin,
+  Clock,
+  MessageCircle,
+  CalendarCheck,
+  User,
+} from "lucide-react";
+import { addBooking } from "../../redux/reducers/bookingReducer";
 
 function SingleService() {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
+
   const { singleService, loading, error } = useSelector(
     (state) => state.service
   );
-  const { testimonials = [] } = useSelector(
-    (state) => state.testimonals
-  );
+
+  const { testimonials = [] } = useSelector((state) => state.testimonals);
 
   useEffect(() => {
     if (id) {
       dispatch(fetchSingleService(id));
-      dispatch(fetchTestimonials(id)); // fetch testimonials for this service
+      dispatch(fetchTestimonials(id));
     }
   }, [dispatch, id]);
 
-  // Calculate average rating from testimonials
   const averageRating =
     testimonials.length > 0
-      ? testimonials.reduce((sum, t) => sum + t.rating, 0) / testimonials.length
+      ? testimonials.reduce((sum, t) => sum + t.rating, 0) /
+      testimonials.length
       : 0;
 
-  if (loading) return <div className="text-center py-20 text-lg">Loading...</div>;
-  if (error) return <div className="text-center py-20 text-red-500">{error}</div>;
-  if (!singleService) return <div className="text-center py-20">No service found</div>;
+  if (loading)
+    return (
+      <div className="h-screen flex items-center justify-center text-gray-500">
+        Loading...
+      </div>
+    );
+
+  if (error)
+    return (
+      <div className="h-screen flex items-center justify-center text-red-500">
+        {error}
+      </div>
+    );
+
+  if (!singleService) return null;
+
+  // naviaget message page
+  const handleMessage = async () => {
+    if (!user?._id) return alert("Please login first");
+
+    const res = await dispatch(
+      createConversation({
+        customerId: user._id,
+        providerId: singleService?.provider?._id,
+      })
+    );
+
+    navigate("/message", {
+      state: {
+        service: singleService,
+        conversation: res?.payload?.conversation,
+      },
+    });
+  };
+
+  // handle booking 
+  const handleBooking = () => {
+    const data = {
+      serviceId: singleService._id,
+      name: singleService.title,
+      provider: singleService.provider,
+      location: singleService.location,
+      price: singleService.price,
+      serviceType :singleService.title
+    }
+
+    dispatch(addBooking(data));
+    navigate("/booking")
+
+  }
 
   return (
-    <div className="min-h-screen py-10 px-4 flex justify-center">
-      <div className="max-w-5xl w-full overflow-hidden">
-        <div className="grid md:grid-cols-2 gap-6">
-          {/* Left Side - Image */}
-          <div className="flex items-center justify-center bg-gradient-to-br from-violet-100 to-violet-200">
+    <div className="min-h-screen bg-gradient-to-b from-yellow-50 via-white to-violet-50 py-10 px-4">
+
+      <div className="max-w-4xl mx-auto space-y-10">
+
+        {/* SERVICE SECTION */}
+        <div className="grid md:grid-cols-2 gap-8">
+
+          {/* IMAGE */}
+          <div className="bg-violet-50 rounded-2xl overflow-hidden">
             <img
-              src={singleService?.image}
-              alt={singleService?.title}
-              className="w-full h-full object-cover"
+              src={singleService?.image || "/no-image.png"}
+              className="w-full h-72 object-cover"
+              alt=""
             />
           </div>
 
-          {/* Right Side - Info */}
-          <div className="p-8">
-            {/* Provider Info */}
-            <div className="flex items-center gap-3 mb-4">
+          {/* INFO */}
+          <div className="space-y-5">
+
+            {/* PROVIDER */}
+            <div className="flex items-center gap-3">
               <img
-                src={singleService?.provider?.avatar}
-                alt="provider"
-                className="h-12 w-12 rounded-full object-cover border"
+                src={singleService?.provider?.avatar || "/user.png"}
+                className="w-10 h-10 rounded-full"
               />
               <div>
-                <h2 className="font-semibold text-gray-800">{singleService?.provider?.name}</h2>
-                <p className="text-sm text-gray-500">{singleService?.provider?.email}</p>
+                <p className="text-sm font-medium text-gray-800">
+                  {singleService?.provider?.name}
+                </p>
+                <p className="text-xs text-gray-500">
+                  {singleService?.provider?.email}
+                </p>
               </div>
             </div>
 
-            {/* Service Info */}
-            <h1 className="text-2xl font-bold text-gray-800 mb-1">{singleService?.title}</h1>
-            <p className="text-violet-600 font-medium text-lg mb-4">{singleService?.category}</p>
-            <p className="text-gray-600 mb-6 leading-relaxed">{singleService?.description}</p>
+            {/* TITLE */}
+            <h1 className="text-xl font-semibold text-gray-800">
+              {singleService?.title}
+            </h1>
 
-            {/* Details */}
-            <div className="space-y-2 text-gray-700 mb-6">
-              <p>
-                <span className="font-semibold">📍 Location:</span> {singleService?.location}
+            <p className="text-sm text-violet-600 font-medium">
+              {singleService?.category}
+            </p>
+
+            <p className="text-sm text-gray-600">
+              {singleService?.description}
+            </p>
+
+            {/* DETAILS */}
+            <div className="bg-yellow-50 p-3 rounded-lg text-sm text-gray-600 space-y-2">
+              <p className="flex items-center gap-2">
+                <MapPin size={16} className="text-yellow-500" />
+                {singleService?.location}
               </p>
-              <p>
-                <span className="font-semibold">🕓 Availability:</span> {singleService?.availability}
+
+              <p className="flex items-center gap-2">
+                <Clock size={16} className="text-yellow-500" />
+                {singleService?.availability}
               </p>
             </div>
 
-            {/* Rating + Price */}
-            <div className="flex justify-between items-center mb-6">
-              <div className="flex gap-1">
+            {/* PRICE + RATING */}
+            <div className="flex items-center justify-between">
+              <div className="flex gap-1 text-yellow-400">
                 {[...Array(5)].map((_, i) => (
-                  <FaStar
+                  <Star
                     key={i}
-                    size={20}
-                    className={i < Math.round(averageRating) ? "text-yellow-400" : "text-gray-300"}
+                    size={18}
+                    className={
+                      i < Math.round(averageRating)
+                        ? "fill-yellow-400 text-yellow-400"
+                        : "text-gray-300"
+                    }
                   />
                 ))}
               </div>
-              <p className="text-2xl font-bold text-violet-700">${singleService?.price}</p>
+
+              <p className="text-lg font-bold text-violet-700">
+                ৳{singleService?.price}
+              </p>
             </div>
 
-            {/* CTA */}
-            <button
-              onClick={() => navigate("/booking", { state: singleService })}
-              className="w-full bg-violet-600 text-white py-3 rounded-lg font-semibold shadow-md hover:bg-violet-700 transition"
-            >
-              Book Now
-            </button>
+            {/* BUTTONS */}
+            <div className="flex gap-3">
+              <button
+                onClick={handleBooking}
+                className="flex-1 bg-violet-600 text-white py-2.5 rounded-lg text-sm hover:bg-violet-700 transition"
+              >
+                Book
+              </button>
+
+              <button
+                onClick={handleMessage}
+                className="flex-1 bg-yellow-400 text-white py-2.5 rounded-lg text-sm hover:bg-yellow-500 transition"
+              >
+                Message
+              </button>
+            </div>
+
           </div>
         </div>
 
-        {/* Testimonials Section */}
-        <div className="px-6 py-8 mt-6">
-          <h3 className="text-xl font-semibold mb-4 text-gray-800">Customer Reviews</h3>
+        {/* REVIEWS SECTION (LEFT aligned under service) */}
+        <div className="max-w-3xl">
+          <h3 className="text-lg font-semibold text-gray-800 mb-4">
+            Customer Reviews
+          </h3>
+
           <AddTestimonals id={id} />
         </div>
+
       </div>
     </div>
   );
 }
 
 export default SingleService;
-
-
-

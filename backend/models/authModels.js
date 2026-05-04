@@ -38,6 +38,17 @@ const userSchema = new mongoose.Schema(
       }
     ],
 
+    // socket message
+    isOnline: {
+      type: Boolean,
+      default: false
+    },
+
+    lastSeen: {
+      type: Date,
+      default: Date.now
+    },
+
     // Password Reset
     resetCode: { type: String },
     expireResetCode: { type: Date },

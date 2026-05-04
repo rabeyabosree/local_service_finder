@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-// Add testimonial thunk
+// Add testimonial 
 export const addTestimonals = createAsyncThunk(
   "testimonial/add",
   async (testiData, { rejectWithValue }) => {
@@ -41,7 +41,7 @@ export const fetchTestimonials = createAsyncThunk(
   }
 );
 
-// edit testimonial thunk
+// edit testimonial 
 export const editTestimonals = createAsyncThunk(
   "testimonial/edit",
   async ({ rating, comment, id }, { rejectWithValue }) => {
@@ -64,7 +64,7 @@ export const editTestimonals = createAsyncThunk(
   }
 );
 
-// delete testimonial thunk
+// delete testimonial 
 export const deleteTestimonals = createAsyncThunk(
   "testimonial/delete",
   async (id, { rejectWithValue }) => {
@@ -138,7 +138,6 @@ const testimonialSlice = createSlice({
       })
       .addCase(editTestimonals.fulfilled, (state, action) => {
         state.loading = false;
-        // পুরনো testimonial list-এ update করো
         const updated = action.payload.testimonial;
         state.testimonials = state.testimonials.map((t) =>
           t._id === updated._id ? updated : t
@@ -158,7 +157,7 @@ const testimonialSlice = createSlice({
       })
       .addCase(deleteTestimonals.fulfilled, (state, action) => {
         state.loading = false;
-        const deletedId = action.payload.id; // backend থেকে deleted testimonial ID পাঠাও
+        const deletedId = action.payload.id;
         state.testimonials = state.testimonials.filter((t) => t._id !== deletedId);
         state.message = action.payload.message;
       })

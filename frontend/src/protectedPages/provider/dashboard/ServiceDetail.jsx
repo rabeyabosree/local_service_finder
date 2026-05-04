@@ -1,17 +1,21 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
-import { fetchSingleService, deleteService } from "../../../redux/reducers/serviceReducer";
+import {
+  fetchSingleService,
+} from "../../../redux/reducers/serviceReducer";
 import { FaMapMarkerAlt } from "react-icons/fa";
+import { ArrowLeft, User } from "lucide-react";
 
 function ServiceDetail() {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // Logged-in user info from auth state
-  const { user } = useSelector((state) => state.auth); // assume auth slice exists
-  const { singleService, loading, error } = useSelector((state) => state.service || {});
+  const { user } = useSelector((state) => state.auth);
+  const { singleService, loading, error } = useSelector(
+    (state) => state.service || {}
+  );
 
   useEffect(() => {
     if (id) {
@@ -21,88 +25,112 @@ function ServiceDetail() {
     }
   }, [dispatch, id]);
 
-  
-
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-screen">
-        <div className="animate-spin h-10 w-10 border-4 border-green-500 border-t-transparent rounded-full"></div>
-        <p className="mt-3 text-gray-600">Loading service details...</p>
+      <div className="flex flex-col justify-center items-center h-screen bg-yellow-50">
+        <div className="animate-spin h-10 w-10 border-4 border-yellow-400 border-t-transparent rounded-full"></div>
+        <p className="mt-3 text-gray-600 text-sm">Loading service...</p>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="text-center text-red-600 py-20">
-        ❌ {error || "Failed to load service details."}
+      <div className="text-center text-red-500 py-20 bg-yellow-50">
+        ❌ {error || "Failed to load service details"}
       </div>
     );
   }
 
   if (!singleService) {
     return (
-      <div className="text-center text-gray-600 py-20">Service not found.</div>
+      <div className="text-center text-gray-600 py-20 bg-yellow-50">
+        Service not found
+      </div>
     );
   }
 
-  // Check if logged-in user is the provider
   const isProvider = user?._id === singleService.provider?._id;
 
   return (
-    <section className="min-h-screen bg-gray-50 py-10 px-4 md:px-8">
-      <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-2xl overflow-hidden">
-        {/* Image */}
-        <div className="h-80 bg-gray-200">
+    <section className="min-h-screen bg-yellow-50 py-10 px-4">
+      <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-sm border border-yellow-100 overflow-hidden">
+
+        {/* IMAGE */}
+        <div className="h-80 w-full overflow-hidden">
           <img
-            src={singleService.image || "https://via.placeholder.com/800x500"}
+            src={singleService.image}
             alt={singleService.title}
             className="w-full h-full object-cover"
           />
         </div>
 
-        {/* Content */}
-        <div className="p-6">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+        {/* CONTENT */}
+        <div className="p-6 space-y-4">
+
+          {/* TITLE */}
+          <h1 className="text-2xl font-semibold text-gray-800">
             {singleService.title}
           </h1>
 
-          <div className="flex items-center text-gray-600 mb-4">
-            <FaMapMarkerAlt className="mr-2 text-green-600" />
-            <span>{singleService.location}</span>
+          {/* LOCATION */}
+          <div className="flex items-center gap-2 text-sm text-gray-600">
+            <FaMapMarkerAlt className="text-yellow-500" />
+            {singleService.location}
           </div>
 
-          <p className="text-gray-700 mb-4">{singleService.description}</p>
+          {/* DESCRIPTION */}
+          <p className="text-sm text-gray-600 leading-relaxed">
+            {singleService.description}
+          </p>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+          {/* INFO BOX */}
+          <div className="grid grid-cols-2 gap-4 text-sm bg-yellow-50 p-4 rounded-xl">
+
             <div>
-              <span className="font-semibold text-gray-800">Price:</span>{" "}
-              ৳{singleService.price}
+              <p className="text-gray-500">Price</p>
+              <p className="font-semibold text-gray-800">
+                ৳{singleService.price}
+              </p>
             </div>
+
             <div>
-              <span className="font-semibold text-gray-800">Availability:</span>{" "}
-              {singleService.availability} hours
+              <p className="text-gray-500">Availability</p>
+              <p className="font-semibold text-gray-800">
+                {singleService.availability} hrs
+              </p>
             </div>
+
           </div>
 
-          {singleService.provider && (
-            <div className="mb-4 text-gray-600">
-              <span className="font-semibold text-gray-800">Provider:</span>{" "}
-              {singleService.provider.name || "Unknown"}
-            </div>
-          )}
+          {/* PROVIDER */}
+          <div className="flex items-center gap-2 text-sm text-gray-700">
+            <User size={16} className="text-yellow-500" />
+            <span>{singleService.provider?.name || "Unknown"}</span>
+          </div>
 
-          {/* Action Buttons */}
-          <div className="flex justify-between mt-6 gap-3 flex-wrap">
+          {/* ACTIONS */}
+          <div className="flex justify-between pt-4">
+
             <button
               onClick={() => navigate(-1)}
-              className="px-5 py-2 bg-gray-300 rounded-lg hover:bg-gray-400 transition"
+              className="flex items-center gap-2 text-sm px-4 py-2 rounded-lg border border-gray-200 hover:bg-yellow-100 transition"
             >
+              <ArrowLeft size={16} />
               Back
             </button>
 
-            
+            <button
+              onClick={() =>
+                navigate("/chat", { state: { service: singleService } })
+              }
+              className="text-sm px-4 py-2 rounded-lg bg-yellow-400 hover:bg-yellow-500 text-white transition"
+            >
+              Message Provider
+            </button>
+
           </div>
+
         </div>
       </div>
     </section>

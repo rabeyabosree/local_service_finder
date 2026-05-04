@@ -8,6 +8,7 @@ import CustomerDashboard from "../../protectedPages/customer/profile/CustomerDas
 import MyBookings from "../../protectedPages/customer/booking/MyBookings";
 import { logout } from "../../redux/reducers/authReducer";
 import DropDownMenu from "./DropDownMenu";
+import { MessageCircle } from 'lucide-react'
 
 function Navbar() {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -111,6 +112,8 @@ function Navbar() {
               Login
             </button>
           )}
+
+          <button onClick={()=> navigate("/message")} className="flex items-center gap-1"> <span><MessageCircle/></span>Messages</button>
 
           {/* Mobile Menu Toggle */}
           <button

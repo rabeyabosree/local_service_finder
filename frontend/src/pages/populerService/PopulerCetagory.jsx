@@ -34,18 +34,18 @@ function PopularCategory() {
       </h1>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 
-                      gap-6 w-full">
+                      gap-6 w-full px-6">
         {services.map((service) => (
           <Link
             key={service.name}
             to={`/category/${service.name}`}
-            className="flex flex-col items-center gap-3 bg-white shadow-md 
-                       border border-gray-100 p-6 rounded-2xl w-full 
+            className="flex flex-col items-center gap-3 
+                       border border-gray-100 rounded-2xl w-full 
                        hover:shadow-xl hover:-translate-y-1 
                        active:scale-95 transition-all duration-200"
           >
-            <span className="text-violet-600">{service.icon}</span>
-            <h3 className="text-gray-800 font-semibold text-base text-center">
+            <span className="text-yellow-600 hover:transform-content scale-90">{service.icon}</span>
+            <h3 className="text-gray-6s00 font-semibold text-base text-center">
               {service.name}
             </h3>
           </Link>

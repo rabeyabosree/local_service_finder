@@ -12,7 +12,7 @@ const initialState = {
   error: null
 }
 
-// --------------------- Thunks ---------------------
+//  Thunks 
 
 // Add Service
 export const addService = createAsyncThunk(
@@ -145,7 +145,7 @@ export const populerService = createAsyncThunk(
   }
 );
 
-// --------------------- Slice ---------------------
+//  Slice 
 
 const serviceSlice = createSlice({
   name: "service",
@@ -188,7 +188,7 @@ const serviceSlice = createSlice({
         state.error = action.payload;
       })
 
-       // Fetch All Services
+      // Fetch All Services
       .addCase(fetchProviderAllService.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -196,7 +196,6 @@ const serviceSlice = createSlice({
       .addCase(fetchProviderAllService.fulfilled, (state, action) => {
         state.loading = false;
         state.providerServics = action.payload.service;
-        console.log(state.providerServics)
         state.message = action.payload.message;
       })
       .addCase(fetchProviderAllService.rejected, (state, action) => {

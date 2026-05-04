@@ -1,11 +1,14 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { populerService } from '../../redux/reducers/serviceReducer';
-import { FaStar } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { populerService } from "../../redux/reducers/serviceReducer";
+import { FaStar } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import { LocateIcon } from "lucide-react";
 
 function PopulerServices() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const { populerServices = [] } = useSelector((state) => state.service);
 
   useEffect(() => {
@@ -13,64 +16,95 @@ function PopulerServices() {
   }, [dispatch]);
 
   return (
-    <section className="max-w-7xl mx-auto px-5 py-12">
-      <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center">
+    <section className="max-w-7xl mx-auto px-8 py-12 bg-amber-50">
+      <h2 className="text-2xl font-semibold text-gray-800 text-center mb-8">
         Popular Services
       </h2>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+
         {populerServices.length === 0 ? (
           <p className="text-gray-500 text-center col-span-full">
-            No services available.
+            No services available
           </p>
         ) : (
           populerServices.map((service) => (
-            <Link
+            <div
               key={service._id}
-              to={`/service/${service._id}`}
-              className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-transform transform hover:-translate-y-1 duration-300 overflow-hidden"
+              onClick={() => navigate(`/service/${service._id}`)}
+              className="bg-white my-6 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition cursor-pointer"
             >
-              <div className="relative w-full h-48">
+              {/* IMAGE */}
+              <div className="h-40 w-full overflow-hidden">
                 <img
                   src={service.image}
                   alt={service.title}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover rounded hover:scale-105 transition duration-300"
                 />
               </div>
 
-              <div className="p-4 flex flex-col justify-between h-48">
-                <div>
-                  <h3 className="font-semibold text-lg text-gray-800 mb-1">
-                    {service.title}
-                  </h3>
-                  <p className="text-sm text-gray-500 mb-2 truncate">
-                    {service.description}
-                  </p>
-                  <p className="text-xs text-gray-400">
-                    {service.location}
-                  </p>
+              {/* CONTENT */}
+              <div className="p-4 space-y-2">
+
+                {/* TITLE */}
+                <h3 className="text-md font-medium text-gray-800 line-clamp-1">
+                  {service.title}
+                </h3>
+
+                {/* DESCRIPTION */}
+                <p className="text-sm text-gray-500 line-clamp-2">
+                  {service.description}
+                </p>
+
+                {/* LOCATION */}
+                <div className="flex items-center gap-1 text-xs text-gray-500">
+                  <LocateIcon size={14} />
+                  <span>{service.location}</span>
                 </div>
 
-                <div className="mt-2 flex items-center justify-between">
-                  <span className="font-bold text-green-600">৳{service.price}</span>
-                  <div className="flex items-center gap-1 text-yellow-400">
-                    <FaStar className="w-4 h-4" />
-                    <span className="text-sm">{service.averageRating || 0}</span>
+                {/* PROVIDER + RATING */}
+                <div className="flex items-center justify-between pt-2">
+
+                  <div className="flex items-center gap-2">
+                    <img
+                      src={service?.provider?.avatar}
+                      className="w-6 h-6 rounded-full"
+                      alt=""
+                    />
+                    <span className="text-xs text-gray-600 truncate max-w-[80px]">
+                      {service?.provider?.name}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-1 text-yellow-400 text-xs">
+                    <FaStar />
+                    <span className="text-gray-700">
+                      {service.averageRating || 0}
+                    </span>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2 mt-3">
-                  <img
-                    src={service.provider.avatar}
-                    alt={service.provider.name}
-                    className="w-8 h-8 rounded-full border border-gray-200"
-                  />
-                  <p className="text-xs text-gray-600 truncate">
-                    {service.provider.name}
-                  </p>
+                {/* PRICE + BUTTON */}
+                <div className="flex items-center justify-between pt-3">
+
+                  <span className="text-sm font-semibold text-green-600">
+                    ৳{service.price}
+                  </span>
+
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigate("/message", { state: { service } });
+                    }}
+                    className="text-xs px-3 py-1 rounded-md border border-gray-300 hover:bg-gray-100 transition"
+                  >
+                    Message
+                  </button>
+
                 </div>
+
               </div>
-            </Link>
+            </div>
           ))
         )}
       </div>
@@ -79,4 +113,3 @@ function PopulerServices() {
 }
 
 export default PopulerServices;
-

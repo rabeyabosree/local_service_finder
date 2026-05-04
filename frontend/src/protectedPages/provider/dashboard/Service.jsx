@@ -11,12 +11,14 @@ import {
 function Service() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [openMenuId, setOpenMenuId] = useState(null); // ✅ একাধিক row-এর জন্য আলাদা ট্র্যাক
+  const [openMenuId, setOpenMenuId] = useState(null); 
 
   // Redux state থেকে service data নিচ্ছি
   const { providerServics = [], loading, error } = useSelector(
     (state) => state.service || {}
   );
+
+  console.log(providerServics)
 
 
   // Fetch all services on component mount

@@ -16,26 +16,17 @@ router.post("/book", async (req, res) => {
       serviceType,
       price,
       deliveryLocation,
-      paymentMethod,
-      transactionId, // advanced payment এর জন্য
     } = req.body;
 
+    console.log(req.body)
+
     // Basic validation
-    if (!userId || !serviceId || !deliveryLocation || !paymentMethod) {
+    if (!userId || !serviceId || !deliveryLocation) {
       return res.status(400).json({ message: "Missing required fields" });
     }
 
     // Default booking state
-    let status = "pending"; // service progress: pending -> accepted -> completed
-    let paid = false;
-
-    // Payment logic
-    if (paymentMethod === "advanced") {
-      if (!transactionId) {
-        return res.status(400).json({ message: "Transaction ID required for advanced payment" });
-      }
-      paid = true; // online payment successful
-    }
+    let status = "pending";
 
     // Cash on delivery: paid = false, status remains pending
     const newBooking = new Booking({
@@ -45,10 +36,7 @@ router.post("/book", async (req, res) => {
       serviceType,
       price,
       deliveryLocation,
-      paymentMethod,
-      transactionId: transactionId || null,
       status,
-      paid,
     });
 
     await newBooking.save();
@@ -68,14 +56,17 @@ router.post("/book", async (req, res) => {
 router.get("/bookings", authMiddleware, async (req, res) => {
   try {
     const { role, id: userId } = req.user;
+
     let filter = {};
 
     if (role === "customer") {
       filter.userId = userId;
-    } else if (role === "provider") {
+    }
+    else if (role === "provider") {
       filter.providerId = userId;
-    } else if (role === "admin") {
-      filter = {}; // Admin সব বুকিং পাবে
+    }
+    else {
+      filter = {};
     }
 
     const bookings = await Booking.find(filter)
@@ -86,10 +77,12 @@ router.get("/bookings", authMiddleware, async (req, res) => {
 
     res.status(200).json({
       success: true,
-      bookings: bookings
+      count: bookings.length,
+      bookings : bookings,
     });
+
   } catch (error) {
-    console.error("Booking fetch error:", error);
+    console.error(error);
     res.status(500).json({ message: "Failed to fetch bookings" });
   }
 });

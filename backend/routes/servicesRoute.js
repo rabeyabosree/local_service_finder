@@ -5,7 +5,7 @@ const authMiddleware = require("../middleware/authMiddleware");
 const Service = require("../models/serviceModel");
 const User = require("../models/authModels");
 
-// ------------------- Add Service (Provider) -------------------
+// Add Service (Provider) 
 router.post("/add", authMiddleware, upload.single("image"), async (req, res) => {
   try {
     // Only Provider can add service
@@ -42,7 +42,7 @@ router.post("/add", authMiddleware, upload.single("image"), async (req, res) => 
   }
 });
 
-// ------------------- Get All Services -------------------
+//Get All Services 
 router.get("/services", async (req, res) => {
   try {
     const services = await Service.find()
@@ -56,19 +56,17 @@ router.get("/services", async (req, res) => {
   }
 });
 
-// ------------------- Get All Services for provider -------------------
-// ------------------- ✅ Get All Services for specific provider -------------------
-// ✅ Get All Services for the Logged-in Provider Only
+//  Get All Services for provider 
 router.get("/provider", authMiddleware, async (req, res) => {
   try {
-    // 🔐 Login করা provider-এর ID
+    //  Login করা provider-এর ID
     const providerId = req.user.userId;
 
     if (!providerId) {
       return res.status(401).json({ message: "Unauthorized: Provider ID missing" });
     }
 
-    // 🧠 শুধু ওই provider-এর service fetch করা হচ্ছে
+    // শুধু ওই provider-এর service fetch করা হচ্ছে
     const services = await Service.find({ provider: providerId })
       .populate("provider", "name email avatar")
       .sort({ createdAt: -1 });
@@ -84,8 +82,7 @@ router.get("/provider", authMiddleware, async (req, res) => {
 });
 
 
-
-// ------------------- Get Single Service Details -------------------
+//  Get Single Service Details
 router.get("/service/:id", async (req, res) => {
   try {
     const { id } = req.params;
@@ -105,7 +102,7 @@ router.get("/service/:id", async (req, res) => {
   }
 });
 
-// ------------------- Edit Service (Provider) -------------------
+//  Edit Service (Provider) 
 router.put("/services/:id", authMiddleware, upload.single("image"), async (req, res) => {
   try {
     const userId = req.user.userId;
@@ -141,7 +138,7 @@ router.put("/services/:id", authMiddleware, upload.single("image"), async (req, 
   }
 });
 
-// ------------------- Delete Service (Provider) -------------------
+//  Delete Service (Provider)
 router.delete("/delete-service/:id", authMiddleware, async (req, res) => {
   try {
     const userId = req.user.userId;
@@ -167,7 +164,7 @@ router.delete("/delete-service/:id", authMiddleware, async (req, res) => {
 
 
 
-// ------------------- Recent Viewed Services (Customer) -------------------
+// Recent Viewed Services (Customer) 
 router.get("/recent-view", authMiddleware, async (req, res) => {
   try {
     const userId = req.user.userId;
@@ -180,7 +177,7 @@ router.get("/recent-view", authMiddleware, async (req, res) => {
   }
 });
 
-// ------------------- Popular Services -------------------
+//  Popular Services
 router.get("/popular-services", async (req, res) => {
   try {
     const services = await Service.find()

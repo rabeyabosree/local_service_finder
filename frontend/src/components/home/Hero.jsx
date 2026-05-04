@@ -151,7 +151,7 @@ function Hero() {
         </h2>
 
         <Link
-          to="/provider/register"
+          to="/register"
           className="
             inline-flex items-center justify-center gap-2 px-6 py-2 
             bg-yellow-400 text-black font-semibold rounded-full shadow-lg

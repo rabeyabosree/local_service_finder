@@ -16,7 +16,7 @@ function Home() {
         <Hero />
         <PopulerCetagory />
         <PopulerServics />
-        <Services />
+        {/* <Services /> */}
         <FaqPage />
         <Testimonials />
         <ContactPage />

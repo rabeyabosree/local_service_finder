@@ -69,9 +69,9 @@ function AddTestimonals({ id }) {
   };
 
   return (
-    <div>
+    <div className="max-w-3xl mx-auto text-start">
       {/* Add/Edit Review Form */}
-      <div className="mb-8 bg-white rounded-lg shadow p-4">
+      <div className="mb-8  bg-white rounded-lg shadow p-4">
         <h3 className="text-xl font-semibold mb-3 text-gray-800">
           {editId ? "Edit Your Review" : "Add Your Review"}
         </h3>
@@ -107,7 +107,7 @@ function AddTestimonals({ id }) {
           <button
             type="submit"
             disabled={loading}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+            className="px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-700 disabled:opacity-50"
           >
             {loading ? "Submitting..." : editId ? "Update Review" : "Submit Review"}
           </button>
@@ -142,7 +142,7 @@ function AddTestimonals({ id }) {
                 <button
                   type="button"
                   onClick={() => handleEdit(t)}
-                  className="ml-auto text-blue-500 text-sm hover:underline"
+                  className="ml-auto text-gray-500 text-sm hover:underline"
                 >
                   Edit
                 </button>
@@ -165,4 +165,4 @@ function AddTestimonals({ id }) {
   );
 }
 
-export default AddTestimonals;
+export default AddTestimonals; 
