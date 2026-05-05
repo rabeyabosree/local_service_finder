@@ -14,6 +14,7 @@ function Hero() {
     (state) => state.service || {}
   );
 
+  // filtered service
   const filteredServices = services.filter((service) => {
     const matchesCategory =
       !query ||
@@ -26,7 +27,7 @@ function Hero() {
 
     return matchesCategory && matchesLocation;
   });
-
+  // handle search
   const handleSearch = () => {
     setShowResults(query || location ? true : false);
   };
@@ -36,10 +37,10 @@ function Hero() {
       className="min-h-screen flex flex-col items-center justify-center px-6 bg-cover bg-center relative"
       style={{ backgroundImage: `url(${img})` }}
     >
-      {/* Overlay (no-click) */}
+      {/* overlay */}
       <div className="absolute inset-0 bg-black/80 z-10 pointer-events-none" />
 
-      {/* Main Content */}
+      {/* content */}
       <section className="relative z-20 text-center text-white w-full max-w-4xl mx-auto px-4">
         <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 drop-shadow-lg leading-snug">
           Find Local Services Near You
@@ -48,7 +49,7 @@ function Hero() {
           Search trusted providers for your daily needs
         </p>
 
-        {/* 🔍 Fully Responsive Search Bar */}
+        {/* responsive service search bar */}
         <div
           className="
             w-full max-w-3xl 
@@ -58,7 +59,7 @@ function Hero() {
             p-3 sm:p-0
           "
         >
-          {/* Category */}
+          {/*category */}
           <input
             type="text"
             placeholder="What e.g. plumber, electrician..."
@@ -72,7 +73,7 @@ function Hero() {
             "
           />
 
-          {/* Location */}
+          {/* location */}
           <input
             type="text"
             placeholder="Where e.g. your city"
@@ -87,7 +88,7 @@ function Hero() {
             "
           />
 
-          {/* Search Button */}
+          {/* search btn */}
           <button
             type="button"
             onClick={handleSearch}
@@ -101,7 +102,7 @@ function Hero() {
           </button>
         </div>
 
-        {/* Results */}
+        {/* search results */}
         {showResults && (
           <div className="mt-4 bg-white/10 backdrop-blur-lg rounded-xl p-4 max-h-[350px] overflow-y-auto text-left">
             {loading ? (
@@ -144,7 +145,7 @@ function Hero() {
         )}
       </section>
 
-      {/* CTA – Fixed Above Overlay */}
+      {/* provider login option */}
       <div className="absolute bottom-6 left-0 w-full text-center text-white border-t border-white/20 pt-4 z-30">
         <h2 className="text-lg font-medium text-gray-200 mb-2">
           Are you a Service Provider?

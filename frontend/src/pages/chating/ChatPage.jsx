@@ -7,6 +7,7 @@ import {
   getAllMessages,
   sendMessage,
   sendImage,
+  seenMessage,
 } from "../../redux/reducers/chatReducer";
 
 function ChatPage({ conversation }) {
@@ -25,18 +26,32 @@ function ChatPage({ conversation }) {
 
   const conversationId = conversation?._id;
 
-  // 🔥 load messages
+  //  load messages
   useEffect(() => {
     if (!conversationId) return;
     dispatch(getAllMessages(conversationId));
   }, [conversationId, dispatch]);
 
-  // 🔥 scroll to bottom
+  // seen message
+  useEffect(() => {
+    
+    if (!conversationId || !user?._id || messages.length === 0) return;
+    const sendData = {
+      conversationId,
+      userId: user._id,
+    };
+
+    dispatch(seenMessage(sendData));
+    socketService.sendSeen(sendData);
+
+  }, [conversationId, messages.length]);
+
+  //  scroll to bottom
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  // 🔥 send text
+  //  send text
   const sendMessageHandler = () => {
     if (!text.trim() || !conversationId) return;
 
@@ -55,7 +70,7 @@ function ChatPage({ conversation }) {
     setText("");
   };
 
-  // 🔥 send image (REALTIME FIXED)
+  // send image 
   const handleImage = async (e) => {
     const file = e.target.files[0];
     if (!file || !conversationId) return;
@@ -84,21 +99,15 @@ function ChatPage({ conversation }) {
         createdAt: Date.now(),
       };
 
-      // 🔥 realtime
+      //  realtime
       socketService.sendMessage(imgMsg);
-
-      // 🔥 optimistic UI (instant show)
-      dispatch({
-        type: "message/addMessage",
-        payload: imgMsg,
-      });
 
     } catch (err) {
       console.log("Image send error", err);
     }
   };
 
-  // 🔥 format time
+  //  format time
   const formatTime = (date) => {
     return new Date(date).toLocaleTimeString([], {
       hour: "2-digit",
@@ -106,7 +115,7 @@ function ChatPage({ conversation }) {
     });
   };
 
-  // 🔥 status
+  //  status
   const getStatus = (msg) => {
     if (msg.seen) return "✓✓";
     return "✓";
@@ -115,17 +124,13 @@ function ChatPage({ conversation }) {
   return (
     <div className="flex flex-col h-full bg-white">
 
-      {/* HEADER */}
-      <div className="h-16 flex items-center px-4 border-b">
+      {/* header */}
+      <div className="h-16 flex items-center px-4 shadow">
         <div className="flex items-center gap-3">
           <img
             src={
-              otherUser?.avatar ||
-              `https://ui-avatars.com/api/?name=${otherUser?.name}`
-            }
-            className="h-10 w-10 rounded-full object-cover"
-          />
-
+              otherUser?.avatar || `https://ui-avatars.com/api/?name=${otherUser?.name}`}
+            className="h-10 w-10 rounded-full object-cover" />
           <div>
             <h2 className="text-sm font-semibold capitalize">
               {otherUser?.name}
@@ -140,7 +145,7 @@ function ChatPage({ conversation }) {
         </div>
       </div>
 
-      {/* MESSAGES */}
+      {/* messages */}
       <div className="flex-1 overflow-y-auto p-3 space-y-3">
 
         {messages?.map((msg, i) => {
@@ -149,51 +154,28 @@ function ChatPage({ conversation }) {
           return (
             <div
               key={i}
-              className={`flex ${
-                isMe ? "justify-end" : "justify-start"
-              }`}
-            >
+              className={`flex ${isMe ? "justify-end" : "justify-start"}`} >
               <div className="max-w-[75%]">
 
-                {/* MESSAGE BOX */}
-                <div
-                  className={`px-3 py-2 rounded-xl text-sm break-words
-                  ${
-                    isMe
-                      ? "bg-purple-600 text-white"
-                      : "bg-gray-100 text-gray-800"
-                  }`}
-                >
+                {/* messages */}
+                <div className={`px-3 py-2 rounded-xl text-sm break-words ${isMe ? "bg-purple-600 text-white" : "bg-gray-100 text-gray-800"}`}>
                   {msg.text && <p>{msg.text}</p>}
 
                   {msg.image && (
                     <img
-                      src={msg.image}
-                      className="mt-2 rounded-lg max-h-40 object-cover"
-                    />
+                      src={msg.image} className="mt-2 rounded-lg max-h-40 object-cover" />
                   )}
                 </div>
 
-                {/* TIME + STATUS */}
-                <div
-                  className={`flex items-center gap-1 mt-1 text-[10px] opacity-70
-                  ${isMe ? "justify-end" : "justify-start"}
-                `}
-                >
+                {/* time and status*/}
+                <div className={`flex items-center gap-1 mt-1 text-[10px] opacity-70 ${isMe ? "justify-end" : "justify-start"} `} >
                   <span>
-                    {msg.createdAt
-                      ? formatTime(msg.createdAt)
-                      : ""}
+                    {msg.createdAt ? formatTime(msg.createdAt) : ""}
                   </span>
 
-                  {isMe && (
-                    <span
-                      className={
-                        msg.seen ? "text-blue-400" : ""
-                      }
-                    >
-                      {getStatus(msg)}
-                    </span>
+                  {isMe && (<span className={msg.seen ? "text-blue-400" : ""}>
+                    {getStatus(msg)}
+                  </span>
                   )}
                 </div>
 
@@ -205,8 +187,8 @@ function ChatPage({ conversation }) {
         <div ref={bottomRef}></div>
       </div>
 
-      {/* INPUT */}
-      <div className="p-3 border-t flex items-center gap-2">
+      {/* input */}
+      <div className="p-3 shadow flex items-center gap-2">
 
         <button onClick={() => fileRef.current.click()}>
           <Paperclip size={18} />

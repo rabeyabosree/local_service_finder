@@ -25,7 +25,7 @@ router.post("/create", async (req, res) => {
         if (!conversation) {
             conversation = await Conversation.create({
                 members: [customerId, providerId],
-                lastMessage: ""
+                lastMessage: null
             })
         }
 
@@ -52,7 +52,7 @@ router.get("/:userId", async (req, res) => {
             members: {
                 $in: [req.params.userId]
             }
-        }).populate("members", "name avatar role");
+        }).populate("members", "name avatar role").populate("lastMessage").sort({ createdAt: - 1 })
 
         res.status(200).json({
             success: true,

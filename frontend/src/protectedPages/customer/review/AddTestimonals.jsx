@@ -18,11 +18,12 @@ function AddTestimonals({ id }) {
     (state) => state.testimonals
   );
 
+  // fetch testimonals
   useEffect(() => {
     if (id) dispatch(fetchTestimonials(id));
   }, [dispatch, id]);
 
-  // Add or edit review
+  //add or edit testimonals
   const handleReviewSubmit = async (e) => {
     e.preventDefault();
     if (!rating || !comment) return;
@@ -44,7 +45,7 @@ function AddTestimonals({ id }) {
     }
   };
 
-  // Delete testimonial safely
+  // delete testimonals
   const handleDelete = useCallback(
     async (testimonialId) => {
       if (!testimonialId) return; // ensure id exists
@@ -60,7 +61,7 @@ function AddTestimonals({ id }) {
     [dispatch, id]
   );
 
-  // Start editing testimonial
+  // handle edit
   const handleEdit = (t) => {
     if (!t?._id) return;
     setEditId(t._id);
@@ -70,7 +71,7 @@ function AddTestimonals({ id }) {
 
   return (
     <div className="max-w-3xl mx-auto text-start">
-      {/* Add/Edit Review Form */}
+      {/* review form add / edit condition */}
       <div className="mb-8  bg-white rounded-lg shadow p-4">
         <h3 className="text-xl font-semibold mb-3 text-gray-800">
           {editId ? "Edit Your Review" : "Add Your Review"}
@@ -114,7 +115,7 @@ function AddTestimonals({ id }) {
         </form>
       </div>
 
-      {/* Show Reviews */}
+      {/* show revierws */}
       <div className="space-y-4">
         {testimonials.length === 0 ? (
           <p className="text-gray-500">No reviews yet.</p>
@@ -138,7 +139,7 @@ function AddTestimonals({ id }) {
                   {t.userId?.name || "Guest"}
                 </span>
 
-                {/* Edit/Delete Buttons */}
+                {/* edit and delete btn */}
                 <button
                   type="button"
                   onClick={() => handleEdit(t)}

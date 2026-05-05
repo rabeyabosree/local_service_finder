@@ -6,8 +6,8 @@ import { CheckCircle, MapPin, Package, DollarSign, Clock } from "lucide-react";
 function SuccessPage() {
   const navigate = useNavigate();
 
+  // get booking from state
   const { bookingInfo } = useSelector((state) => state.booking);
-
   const booking = bookingInfo;
 
   if (!booking) {
@@ -23,7 +23,7 @@ function SuccessPage() {
 
       <div className="w-full max-w-lg bg-white rounded-2xl shadow-lg p-6 space-y-6">
 
-        {/* SUCCESS HEADER */}
+        {/*success header */}
         <div className="text-center space-y-2">
 
           <div className="flex justify-center">
@@ -40,14 +40,14 @@ function SuccessPage() {
 
         </div>
 
-        {/* STATUS BADGE */}
+        {/* status badge */}
         <div className="flex justify-center">
           <span className="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-xs font-medium">
             {booking.status || "pending"}
           </span>
         </div>
 
-        {/* DETAILS CARD */}
+        {/* details card */}
         <div className="space-y-3 text-sm text-gray-700">
 
           <div className="flex items-center justify-between">
@@ -91,20 +91,16 @@ function SuccessPage() {
 
         </div>
 
-        {/* ACTION BUTTONS */}
+        {/* action buttons */}
         <div className="flex gap-3 pt-4">
 
-          <button
-            onClick={() => navigate("/")}
-            className="flex-1 bg-black text-white py-2.5 rounded-lg text-sm hover:opacity-80 transition"
-          >
+          <button onClick={() => navigate("/")}
+            className="flex-1 bg-black text-white py-2.5 rounded-lg text-sm hover:opacity-80 transition">
             Go Home
           </button>
 
-          <button
-            onClick={() => navigate("/my-bookings")}
-            className="flex-1 bg-violet-600 text-white py-2.5 rounded-lg text-sm hover:bg-violet-700 transition"
-          >
+          <button onClick={() => navigate("/my-bookings")}
+            className="flex-1 bg-violet-600 text-white py-2.5 rounded-lg text-sm hover:bg-violet-700 transition" >
             My Bookings
           </button>
 

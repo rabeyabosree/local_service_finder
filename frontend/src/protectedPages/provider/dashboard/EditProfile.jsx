@@ -17,12 +17,12 @@ function EditProfile() {
 
   const dispatch = useDispatch();
 
-  // Load profile on mount
+  // fetch profile data and set into formdata
   useEffect(() => {
     const fetchProfile = async () => {
       try {
         const res = await dispatch(authProfile()).unwrap();
-       
+
         setFormData({
           name: res.user.name || "",
           email: res.user.email || "",
@@ -45,12 +45,12 @@ function EditProfile() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // File change handler
+  // file change
   const handleFileChange = (e) => {
     setAvatarFile(e.target.files[0]);
   };
 
-  // Submit handler
+  // submit
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -64,8 +64,8 @@ function EditProfile() {
       if (avatarFile) data.append("avatar", avatarFile);
 
       const updated = await dispatch(updateProfile(data)).unwrap();
-      
-      // Update local form state
+
+      // update formdata state
       setFormData({
         name: updated.user.name || "",
         email: updated.user.email || "",
@@ -103,7 +103,7 @@ function EditProfile() {
             className="text-sm text-gray-600"
           />
         </div>
-
+        {/* data changes form */}
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
             type="text"

@@ -3,6 +3,8 @@ import React from "react";
 import { FaStar, FaRegStar } from "react-icons/fa";
 
 function Testimonials() {
+
+  // dummy testimonals
   const testimonials = [
     {
       id: 1,
@@ -34,6 +36,7 @@ function Testimonials() {
     },
   ];
 
+  // render starts
   const renderStars = (rating) => {
     return [...Array(5)].map((_, i) =>
       i < rating ? (
@@ -49,26 +52,26 @@ function Testimonials() {
       <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-center text-[#5C7E8F] mb-12">
         What Our Clients Say
       </h1>
-
+      {/* testimonals about marketplce platform */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
         {testimonials.map((t) => (
           <div
             key={t.id}
             className=" rounded-2xl p-6 flex flex-col items-center text-center hover:shadow-2xl transition duration-300"
           >
-            {/* Profile Image */}
+            {/* profile img*/}
 
             <span className="w-20 h-20 sm:w-24 sm:h-24 bg-yellow-100 rounded-full flex items-center justify-center mb-4 text-2xl">
               {t.img}
             </span>
 
-            {/* Name */}
+            {/* name */}
             <h2 className="text-lg sm:text-xl font-semibold mb-1">{t.name}</h2>
 
-            {/* Rating */}
+            {/* rating */}
             <div className="flex justify-center gap-1 mb-3">{renderStars(t.rating)}</div>
 
-            {/* Review */}
+            {/* review */}
             <p className="text-gray-600 italic text-sm sm:text-base">"{t.review}"</p>
           </div>
         ))}

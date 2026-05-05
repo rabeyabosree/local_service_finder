@@ -12,7 +12,7 @@ const initialState = {
     message: null
 };
 
-// book service Thunk
+// book service 
 export const bookService = createAsyncThunk(
     "booking/book",
     async (bookingData, { rejectWithValue }) => {
@@ -30,10 +30,9 @@ export const bookService = createAsyncThunk(
     }
 );
 
-// get all bookings Thunk
+// get all bookings 
 export const getAllBookings = createAsyncThunk(
-    "bookings/all",
-    async (_, { rejectWithValue }) => {
+    "bookings/all", async (_, { rejectWithValue }) => {
         try {
             const token = localStorage.getItem('token')
             const { data } = await axios.get(
@@ -41,9 +40,8 @@ export const getAllBookings = createAsyncThunk(
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
-            }
-            );
-            console.log(data)
+            });
+
             return data;
         } catch (error) {
             return rejectWithValue(
@@ -65,8 +63,7 @@ export const updateStatuss = createAsyncThunk(
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
-                }
-            );
+                });
             return data;
         } catch (error) {
             return rejectWithValue(
@@ -131,11 +128,7 @@ const bookingSlice = createSlice({
     reducers: {
         addBooking: (state, action) => {
             const data = action.payload;
-
-            const exists = state.bookings.find(
-                (b) => b._id === data._id
-            );
-
+            const exists = state.bookings.find((b) => b._id === data._id);
             if (!exists) {
                 state.bookings.push(data);
             }

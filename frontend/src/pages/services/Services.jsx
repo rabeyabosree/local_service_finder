@@ -13,14 +13,14 @@ function Services() {
   const { services = [], loading, error } = useSelector(
     (state) => state.service || {}
   );
-
+  // fetch all servics
   useEffect(() => {
     dispatch(fetchAllService())
       .unwrap()
       .catch((err) => console.error("Failed to fetch services:", err));
   }, [dispatch]);
 
-  // Slider settings
+  // slider settings
   const sliderSettings = {
     dots: true,
     infinite: true,
@@ -39,7 +39,7 @@ function Services() {
   return (
     <section className="min-h-screen py-14 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-        {/* Heading */}
+        {/* header */}
         <div className="text-center mb-12">
           <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-2">
             Featured <span className="text-green-600">Services</span>
@@ -50,7 +50,7 @@ function Services() {
           </p>
         </div>
 
-        {/* Slider Section */}
+        {/* service slider */}
         {!loading && services.length > 0 && (
           <div className="mb-8">
             <Slider {...sliderSettings}>
@@ -60,7 +60,7 @@ function Services() {
                     onClick={() => navigate(`/service/${service._id}`)}
                     className="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition cursor-pointer flex flex-col h-full"
                   >
-                    {/* Image */}
+                    {/* img */}
                     <div className="h-48 w-full bg-gray-200 overflow-hidden">
                       <img
                         src={service.image}
@@ -69,7 +69,7 @@ function Services() {
                       />
                     </div>
 
-                    {/* Info */}
+                    {/* info */}
                     <div className="p-4 flex flex-col flex-1">
                       <h3 className="text-lg font-semibold text-gray-900 mb-1 line-clamp-1">
                         {service.title}
@@ -93,7 +93,7 @@ function Services() {
               ))}
             </Slider>
 
-            {/* See More Button */}
+            {/* see more btn */}
             <div className="text-center mt-6">
               <button
                 onClick={() => navigate("/services")}
@@ -105,7 +105,7 @@ function Services() {
           </div>
         )}
 
-        {/* Loading / Error / Empty States */}
+        {/* loading and error*/}
         {loading && (
           <div className="text-center py-20">
             <div className="animate-spin h-10 w-10 border-4 border-green-500 border-t-transparent rounded-full mx-auto"></div>
@@ -115,7 +115,7 @@ function Services() {
 
         {error && (
           <div className="text-center text-red-500 py-10">
-            ❌ {error || "Failed to load services."}
+            {error || "Failed to load services."}
           </div>
         )}
 

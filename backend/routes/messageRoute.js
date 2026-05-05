@@ -49,13 +49,6 @@ router.post("/image", upload.single("image"), async (req, res) => {
     try {
         const { senderId, receiverId, conversationId } = req.body;
 
-        console.log("📩 MESSAGE DEBUG:", {
-            senderId,
-            receiverId,
-            conversationId,
-            onlineUsers: global.onlineUsers
-        });
-
         const image = req.file?.path;
 
         const message = await Message.create({
@@ -74,7 +67,7 @@ router.post("/image", upload.single("image"), async (req, res) => {
             updatedAt: new Date(),
         });
 
-        // 🔥 REALTIME SOCKET EMIT
+        // REALTIME SOCKET EMIT
         const io = global.io;
         const onlineUsers = global.onlineUsers;
 

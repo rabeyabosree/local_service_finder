@@ -22,6 +22,7 @@ function Navbar() {
   const [dropDownMenu, setDropDownMenu] = useState(false);
   const [activeComponent, setActiveComponent] = useState("");
 
+  // navlikns
   const navLinks = [
     { name: "Home", path: "/" },
     { name: "Services", path: "/services" },
@@ -30,17 +31,20 @@ function Navbar() {
     { name: "Contact", path: "/contact" },
   ];
 
+  //menus
   const dropMenu = [
     { name: "Profile", component: "cutomerProfile" },
     { name: "Booking", component: "myBooking" },
     { name: "Logout" },
   ];
 
+  // handle toggole model
   const handleCloseModal = () => {
     setActiveComponent("");
     setDropDownMenu(false);
   };
-
+  
+  // logout
   const logoutHandle = () => {
     dispatch(logout());
     navigate("/login");
@@ -50,14 +54,14 @@ function Navbar() {
     <header className="fixed top-0 left-0 w-full z-[100] text-white transition-all duration-300">
       <div className="flex justify-between items-center py-4 px-6 md:px-12 max-w-7xl mx-auto">
 
-        {/* Logo */}
+        {/* logo */}
         <Link to="/" className="flex items-center gap-1">
           <h1 className="text-2xl font-bold tracking-wide text-yellow-400">
             EasyFind<span className="text-aqua">.</span>
           </h1>
         </Link>
 
-        {/* Desktop Nav */}
+        {/* dekstop nav */}
         <nav className="hidden md:flex items-center gap-10">
           {navLinks.map((nav) => (
             <Link
@@ -70,10 +74,10 @@ function Navbar() {
           ))}
         </nav>
 
-        {/* Right Section */}
+        {/* right section */}
         <div className="flex items-center gap-4">
 
-          {/* Customer */}
+          {/* customer */}
           {isAuth === "Customer" && (
             <div className="relative">
               <button
@@ -93,7 +97,7 @@ function Navbar() {
             </div>
           )}
 
-          {/* Provider */}
+          {/* provider */}
           {isAuth === "Provider" && (
             <button
               onClick={() => navigate("/dashboard")}
@@ -103,7 +107,7 @@ function Navbar() {
             </button>
           )}
 
-          {/* Guest (No Auth) */}
+          {/* gust user*/}
           {!isAuth && (
             <button
               onClick={() => navigate("/login")}
@@ -113,9 +117,9 @@ function Navbar() {
             </button>
           )}
 
-          <button onClick={()=> navigate("/message")} className="flex items-center gap-1"> <span><MessageCircle/></span>Messages</button>
+          <button onClick={() => navigate("/message")} className="flex items-center gap-1"> <span><MessageCircle /></span>Messages</button>
 
-          {/* Mobile Menu Toggle */}
+          {/* mobile menu toggle*/}
           <button
             aria-label="Toggle Menu"
             onClick={() => setIsOpen(!isOpen)}
@@ -126,11 +130,10 @@ function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Nav */}
+      {/* mobile menus*/}
       <nav
-        className={`absolute left-0 w-full bg-black/95 backdrop-blur-md md:hidden overflow-hidden transition-all duration-300 ${
-          isOpen ? "max-h-[350px] opacity-100" : "max-h-0 opacity-0"
-        }`}
+        className={`absolute left-0 w-full bg-black/95 backdrop-blur-md md:hidden overflow-hidden transition-all duration-300 ${isOpen ? "max-h-[350px] opacity-100" : "max-h-0 opacity-0"
+          }`}
       >
         <div className="flex flex-col gap-4 p-6 text-center border-t border-white/10">
           {navLinks.map((nav) => (
@@ -171,7 +174,7 @@ function Navbar() {
         </div>
       </nav>
 
-      {/* Overlay Components */}
+      {/* overlay components */}
       {activeComponent === "cutomerProfile" && (
         <CustomerDashboard onClose={handleCloseModal} />
       )}

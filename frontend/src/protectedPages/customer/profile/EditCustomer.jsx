@@ -15,11 +15,12 @@ function EditCustomer() {
     avatar: "",
   });
 
-  // 🔹 Load current profile data into the form
+  // get current profile data
   useEffect(() => {
     dispatch(authProfile());
   }, [dispatch]);
 
+  // set form data
   useEffect(() => {
     if (profileData) {
       setFormData({
@@ -33,19 +34,19 @@ function EditCustomer() {
     }
   }, [profileData]);
 
-  // 🔸 Input Change Handler
+  // input change
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // 📝 Submit Update Profile
+  // submit update profile
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       await dispatch(updateProfile(formData)).unwrap();
-      alert("✅ Profile updated successfully!");
-      
+      alert(" Profile updated successfully!");
+
     } catch (err) {
       console.error(err);
     }
@@ -53,16 +54,16 @@ function EditCustomer() {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
-      {/* Overlay */}
+      {/* overlay*/}
       <div
         className="absolute inset-0 bg-black/40 backdrop-blur-sm"
-        // onClick={onClose}
+      // onClick={onClose}
       ></div>
 
-      {/* Edit Modal */}
+      {/* edit model */}
       <div className="relative bg-white rounded-2xl shadow-2xl p-6 w-full max-w-lg mx-4">
         <h2 className="text-2xl font-bold mb-4 text-center border-b pb-3">
-          ✏️ Edit Profile
+           Edit Profile
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -138,7 +139,7 @@ function EditCustomer() {
             />
           </div>
 
-          {/* Preview Avatar */}
+          {/* preview avatar */}
           {formData.avatar && (
             <div className="flex justify-center mt-2">
               <img
@@ -149,10 +150,11 @@ function EditCustomer() {
             </div>
           )}
 
+          {/* actions btn */}
           <div className="flex justify-between mt-6">
             <button
               type="button"
-            //   onClick={onClose}
+              //   onClick={onClose}
               className="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400"
             >
               Cancel

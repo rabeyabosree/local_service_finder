@@ -18,7 +18,7 @@ function Dashboard() {
   const dispatch = useDispatch();
 
 
-
+  //  fetch profile data
   useEffect(() => {
     const profileInfo = async () => {
       try {
@@ -31,7 +31,7 @@ function Dashboard() {
     profileInfo();
   }, [dispatch]);
 
-  // Bookings data object array
+  // dummy bookings data
   const bookings = [
     {
       id: 1,
@@ -70,7 +70,7 @@ function Dashboard() {
         <h1 className="text-xl font-bold text-gray-800">
           Service Provider Dashboard
         </h1>
-
+        {/* provider profile */}
         <div className="flex items-center gap-4" onClick={() => navigate("/dashboard/profile")}>
           <img
             src={provider?.avatar}
@@ -81,12 +81,12 @@ function Dashboard() {
             <h2 className="text-sm font-semibold text-gray-700">{provider?.name}</h2>
           </div>
         </div>
-
+        {/* mesg btn */}
         <button onClick={() => navigate("/message")} className='flex items-center gap-1'><span><MessageCircle /></span>Message</button>
       </div>
 
       <div className="p-6">
-        {/* Overview Stats */}
+        {/* overview states */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
           <div className="bg-white p-6 rounded-xl shadow text-center">
             <div className="flex items-center justify-center gap-2 mb-2">
@@ -113,7 +113,7 @@ function Dashboard() {
           </div>
         </div>
 
-        {/* Rating and Earning */}
+        {/* rating and reviews */}
         <div className="bg-white px-16 py-4 rounded-xl shadow flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
             <FaStar className="text-yellow-500 text-2xl" />
@@ -132,7 +132,7 @@ function Dashboard() {
           </div>
         </div>
 
-        {/* Recent Booking Table */}
+        {/* recent bookings */}
         <div className="bg-white p-6 rounded-xl shadow overflow-x-auto">
           <h3 className="text-lg font-semibold mb-4">Recent Bookings</h3>
           <table className="min-w-full text-sm text-left">

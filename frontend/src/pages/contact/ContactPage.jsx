@@ -6,10 +6,10 @@ function ContactPage() {
       className="w-full min-h-screen flex items-center justify-center bg-cover bg-center relative px-4 sm:px-6 lg:px-8"
       style={{ backgroundImage: `url(${img})` }}
     >
-      {/* Overlay for readability */}
+      {/* overlay */}
       <div className="absolute inset-0 bg-black/50"></div>
 
-      {/* Form container */}
+      {/* contact box */}
       <div className="relative bg-white rounded-2xl shadow-2xl max-w-lg w-full p-8 sm:p-10 m-4">
         <h1 className="text-3xl sm:text-4xl font-extrabold text-violet-800 text-center mb-4">
           Get in Touch
@@ -18,7 +18,7 @@ function ContactPage() {
           Have questions or need help? Fill out the form below and we’ll get
           back to you shortly.
         </p>
-
+        {/* contact form */}
         <form className="space-y-4">
           <input
             type="text"

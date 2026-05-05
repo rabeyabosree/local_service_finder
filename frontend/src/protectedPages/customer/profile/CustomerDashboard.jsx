@@ -9,10 +9,12 @@ function CustomerDashboard({ onClose }) {
   const [editComponent, SetEditComponent] = useState(false)
   const { profileData, loading } = useSelector((state) => state.auth);
 
+  // fetxh profile data 
   useEffect(() => {
     dispatch(authProfile());
   }, [dispatch]);
 
+  // profile data check
   if (loading || !profileData) {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center">
@@ -26,18 +28,18 @@ function CustomerDashboard({ onClose }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
-      {/* 🔸 Overlay */}
+      {/* overlay */}
       <div
         className="absolute inset-0 bg-black/40 backdrop-blur-sm"
         onClick={onClose}
       ></div>
 
-      {/* 🧭 Dashboard Content */}
+      {/* dashboard content */}
       <div className="relative bg-white rounded-2xl shadow-2xl p-6 w-full max-w-lg mx-4">
         <div className="flex justify-between items-center mb-6 border-b pb-3">
           <h1 className="text-2xl font-bold">Customer Dashboard</h1>
 
-          {/* ✏️ Edit Profile Icon */}
+          {/* edit profile icon */}
           <button
             onClick={() => SetEditComponent(true)}
             className="p-2 rounded-full hover:bg-gray-100 transition"
@@ -51,7 +53,7 @@ function CustomerDashboard({ onClose }) {
           editComponent && <EditCustomer />
         }
 
-        {/* 🧍 Profile Section */}
+        {/* profile secton */}
         <div className="flex flex-col items-center text-center space-y-4">
           <img
             src={profileData.avatar || "/default-avatar.png"}
@@ -62,7 +64,7 @@ function CustomerDashboard({ onClose }) {
           <p className="text-gray-600">{profileData.email}</p>
         </div>
 
-        {/* 📋 Additional Info */}
+        {/* additional info */}
         <div className="mt-6 space-y-3">
           <div className="flex justify-between">
             <span className="font-medium text-gray-800">Location:</span>
@@ -79,7 +81,7 @@ function CustomerDashboard({ onClose }) {
           </div>
         </div>
 
-        {/* ❌ Close Button */}
+        {/* close btn*/}
         <div className="mt-8 flex justify-center">
           <button
             onClick={onClose}

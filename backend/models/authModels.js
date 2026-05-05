@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema(
   {
-    // Common Fields
+    // common
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
@@ -14,9 +14,9 @@ const userSchema = new mongoose.Schema(
       required: true,
     },
 
-    // Provider Specific
+    // provider spesific
     avatar: { type: String },
-    service: { type: String }, // e.g. Electrician, Plumber
+    service: { type: String },
     location: { type: String },
     bio: { type: String },
     phone: { type: Number },
@@ -25,31 +25,14 @@ const userSchema = new mongoose.Schema(
         type: String,
         enum: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
       },
-      start: { type: String }, // e.g. "09:00"
-      end: { type: String },   // e.g. "17:00"
+      start: { type: String },
+      end: { type: String },
     },
     rating: { type: Number, default: 0 },
     totalJobs: { type: Number, default: 0 },
     earnings: { type: Number, default: 0 },
-    recentViews: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Service"
-      }
-    ],
 
-    // socket message
-    isOnline: {
-      type: Boolean,
-      default: false
-    },
-
-    lastSeen: {
-      type: Date,
-      default: Date.now
-    },
-
-    // Password Reset
+    //password reset
     resetCode: { type: String },
     expireResetCode: { type: Date },
   },

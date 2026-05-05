@@ -5,7 +5,7 @@ function Footer() {
   return (
     <footer className="bg-gray-50 text-gray-700 pt-10 pb-6">
       <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between gap-8 md:gap-0">
-        {/* About */}
+        {/*about */}
         <div className="flex-1">
           <h2 className="text-2xl font-bold text-violet-900 mb-3">EasyFind</h2>
           <p className="text-gray-500 max-w-sm text-sm sm:text-base">
@@ -13,7 +13,7 @@ function Footer() {
           </p>
         </div>
 
-        {/* Quick Links */}
+        {/* quick links*/}
         <div className="flex-1">
           <h3 className="text-lg font-semibold text-violet-700 mb-3">Quick Links</h3>
           <ul className="space-y-2 text-gray-600 text-sm sm:text-base">
@@ -24,7 +24,7 @@ function Footer() {
           </ul>
         </div>
 
-        {/* Social Media */}
+        {/* social media */}
         <div className="flex-1">
           <h3 className="text-lg font-semibold text-violet-700 mb-3">Follow Us</h3>
           <div className="flex gap-4">
@@ -36,7 +36,7 @@ function Footer() {
         </div>
       </div>
 
-      {/* Copyright */}
+      {/* copu right */}
       <div className="mt-10 border-t border-gray-200 pt-4 text-center text-gray-500 text-sm sm:text-base">
         © {new Date().getFullYear()} EasyFind. All rights reserved.
       </div>

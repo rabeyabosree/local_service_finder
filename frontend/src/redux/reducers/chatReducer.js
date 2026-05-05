@@ -118,7 +118,6 @@ export const deleteMessage = createAsyncThunk(
 )
 
 
-
 // initialState
 const initialState = {
     loading: false,
@@ -134,7 +133,11 @@ const initialState = {
 const chatSlice = createSlice({
     name: "chat",
     initialState,
-    reducers: {},
+    reducers: {
+        setOnlineUsers: (state, action) => {
+            state.onlineUsers = action.payload;
+        }
+    },
     extraReducers: (builder) => {
         builder
             .addCase(createConversation.pending, (state) => {
@@ -263,5 +266,5 @@ const chatSlice = createSlice({
     }
 })
 
-
+export const { setOnlineUsers } = chatSlice.actions;
 export default chatSlice.reducer;

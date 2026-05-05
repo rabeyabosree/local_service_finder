@@ -7,16 +7,11 @@ const conversationSchema = new mongoose.Schema({
             ref: "User"
         }
     ],
-
     lastMessage: {
-        type: String,
-        default: ""
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Message",
     },
 
-    updatedAt: {
-        type: Date,
-        default: Date.now
-    }
-});
+}, { timestamps: true });
 
 module.exports = mongoose.model("conversation", conversationSchema)

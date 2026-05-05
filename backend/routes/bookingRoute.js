@@ -18,17 +18,13 @@ router.post("/book", async (req, res) => {
       deliveryLocation,
     } = req.body;
 
-    console.log(req.body)
 
-    // Basic validation
+    //check validatiy
     if (!userId || !serviceId || !deliveryLocation) {
       return res.status(400).json({ message: "Missing required fields" });
     }
 
-    // Default booking state
-    let status = "pending";
-
-    // Cash on delivery: paid = false, status remains pending
+    //create new booking
     const newBooking = new Booking({
       userId,
       serviceId,
@@ -36,7 +32,7 @@ router.post("/book", async (req, res) => {
       serviceType,
       price,
       deliveryLocation,
-      status,
+      status: "pending",
     });
 
     await newBooking.save();
@@ -52,7 +48,7 @@ router.post("/book", async (req, res) => {
 });
 
 
-// Get all bookings (for customer: own bookings, for provider: bookings of their services)
+// Get all bookings 
 router.get("/bookings", authMiddleware, async (req, res) => {
   try {
     const { role, id: userId } = req.user;
@@ -78,7 +74,7 @@ router.get("/bookings", authMiddleware, async (req, res) => {
     res.status(200).json({
       success: true,
       count: bookings.length,
-      bookings : bookings,
+      bookings: bookings,
     });
 
   } catch (error) {
@@ -88,15 +84,16 @@ router.get("/bookings", authMiddleware, async (req, res) => {
 });
 
 
-// -------------------status update (provider) -------------------
+//update booking status
 router.put("/status/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const { status } = req.body;
 
+    // find booking
     const booking = await Booking.findById(id);
     if (!booking) return res.status(404).json({ message: "Booking not found" });
-
+    // update status
     booking.status = status;
     await booking.save();
 
@@ -111,11 +108,11 @@ router.put("/status/:id", async (req, res) => {
 // Get all bookings of logged-in customer
 router.get("/customer", authMiddleware, async (req, res) => {
   try {
-    const customerId = req.user.id; // authMiddleware থেকে আসছে
-
+    const customerId = req.user.id; 
+// get all bookings by customer 
     const bookings = await Booking.find({ userId: customerId })
-      .populate("serviceId")            // service details
-      .populate("userId", "name email") // customer info
+      .populate("serviceId")            
+      .populate("userId", "name email") 
       .sort({ createdAt: -1 });
 
     res.status(200).json({
@@ -129,14 +126,12 @@ router.get("/customer", authMiddleware, async (req, res) => {
 });
 
 
-// Get all bookings for logged-in provider
-// 📌 Get single booking by ID (Customer only)
-// routes/bookingRoutes.js
+
+// Get single booking
 router.get("/provider/:bookingId", authMiddleware, async (req, res) => {
   try {
     const { bookingId } = req.params;
-    console.log("Booking ID received:", bookingId);
-
+   
     const booking = await Booking.findById(bookingId)
       .populate("userId", "name email")
       .populate("serviceId");

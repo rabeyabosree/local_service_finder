@@ -6,7 +6,8 @@ import { authRegister } from "../../redux/reducers/authReducer";
 function RegisterPage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  
+// form data state
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -36,7 +37,7 @@ function RegisterPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8">
-        <h2 className="text-3xl font-bold text-center text-indigo-700">
+        <h2 className="text-3xl font-bold text-center text-yellow-700">
           Create an Account
         </h2>
         <p className="text-center text-gray-500 mt-2">
@@ -49,9 +50,9 @@ function RegisterPage() {
             {error}
           </div>
         )}
-
+        {/* user data handling form */}
         <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-          {/* Full Name */}
+          {/*full name */}
           <div>
             <label className="block text-gray-700 mb-1 font-medium">
               Full Name
@@ -61,13 +62,13 @@ function RegisterPage() {
               name="name"
               value={formData.name}
               onChange={handleChange}
-              placeholder="John Doe"
+              placeholder="Enter your Full Name"
               className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
               required
             />
           </div>
 
-          {/* Email */}
+          {/* email */}
           <div>
             <label className="block text-gray-700 mb-1 font-medium">
               Email Address
@@ -77,13 +78,13 @@ function RegisterPage() {
               name="email"
               value={formData.email}
               onChange={handleChange}
-              placeholder="you@example.com"
+              placeholder="Enter your email"
               className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
               required
             />
           </div>
 
-          {/* Password */}
+          {/* password*/}
           <div>
             <label className="block text-gray-700 mb-1 font-medium">
               Password
@@ -99,7 +100,7 @@ function RegisterPage() {
             />
           </div>
 
-          {/* Role */}
+          {/* role change */}
           <div>
             <label className="block text-gray-700 mb-1 font-medium">
               Register As
@@ -115,24 +116,24 @@ function RegisterPage() {
             </select>
           </div>
 
-          {/* Submit Button */}
+          {/* submit */}
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-indigo-600 text-white py-2 rounded-lg font-semibold hover:bg-indigo-700 transition"
+            className="w-full bg-yellow-600 text-white py-2 rounded-lg font-semibold hover:bg-yellow-700 transition"
           >
             {loading ? "Registering..." : "Register"}
           </button>
         </form>
 
-        {/* Login Redirect */}
+        {/* login redirect */}
         <div className="text-center mt-6">
           <p className="text-sm text-gray-600">
             Already have an account?{" "}
             <button
               type="button"
               onClick={() => navigate("/login")}
-              className="text-indigo-600 font-medium hover:underline"
+              className="text-yellow-600 font-medium hover:underline"
             >
               Login
             </button>

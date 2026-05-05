@@ -9,7 +9,7 @@ function ProviderProfile() {
   const dispatch = useDispatch();
 
  
-
+// fetch procider profile
   useEffect(() => {
     const profileInfo = async () => {
       try {

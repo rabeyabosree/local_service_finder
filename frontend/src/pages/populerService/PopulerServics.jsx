@@ -11,6 +11,7 @@ function PopulerServices() {
 
   const { populerServices = [] } = useSelector((state) => state.service);
 
+  // fetch populer service by filtering rating in backend
   useEffect(() => {
     dispatch(populerService());
   }, [dispatch]);
@@ -23,6 +24,7 @@ function PopulerServices() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
 
+        {/* service list */}
         {populerServices.length === 0 ? (
           <p className="text-gray-500 text-center col-span-full">
             No services available
@@ -34,7 +36,7 @@ function PopulerServices() {
               onClick={() => navigate(`/service/${service._id}`)}
               className="bg-white my-6 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition cursor-pointer"
             >
-              {/* IMAGE */}
+              {/* image */}
               <div className="h-40 w-full overflow-hidden">
                 <img
                   src={service.image}
@@ -43,28 +45,28 @@ function PopulerServices() {
                 />
               </div>
 
-              {/* CONTENT */}
+              {/* content */}
               <div className="p-4 space-y-2">
 
-                {/* TITLE */}
+                {/* title */}
                 <h3 className="text-md font-medium text-gray-800 line-clamp-1">
                   {service.title}
                 </h3>
 
-                {/* DESCRIPTION */}
+                {/*description */}
                 <p className="text-sm text-gray-500 line-clamp-2">
                   {service.description}
                 </p>
 
-                {/* LOCATION */}
+                {/* location*/}
                 <div className="flex items-center gap-1 text-xs text-gray-500">
                   <LocateIcon size={14} />
                   <span>{service.location}</span>
                 </div>
 
-                {/* PROVIDER + RATING */}
+                {/*provider info */}
                 <div className="flex items-center justify-between pt-2">
-
+                  {/*img  name */}
                   <div className="flex items-center gap-2">
                     <img
                       src={service?.provider?.avatar}
@@ -75,7 +77,7 @@ function PopulerServices() {
                       {service?.provider?.name}
                     </span>
                   </div>
-
+                  {/* rating */}
                   <div className="flex items-center gap-1 text-yellow-400 text-xs">
                     <FaStar />
                     <span className="text-gray-700">
@@ -84,13 +86,13 @@ function PopulerServices() {
                   </div>
                 </div>
 
-                {/* PRICE + BUTTON */}
+                {/* price and actons btn*/}
                 <div className="flex items-center justify-between pt-3">
-
+                  {/* price */}
                   <span className="text-sm font-semibold text-green-600">
                     ৳{service.price}
                   </span>
-
+                  {/* send messge btn */}
                   <button
                     onClick={(e) => {
                       e.stopPropagation();

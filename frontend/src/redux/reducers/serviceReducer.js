@@ -5,7 +5,6 @@ const initialState = {
   services: [],
   providerServics: [],
   singleService: null,
-  recentView: [],
   populerServices: [],
   message: null,
   loading: false,
@@ -114,23 +113,6 @@ export const deleteService = createAsyncThunk(
   }
 );
 
-// Fetch Recent Viewed Services
-export const viewedService = createAsyncThunk(
-  "service/recentViewed",
-  async (_, { rejectWithValue }) => {
-    try {
-      const token = localStorage.getItem("token");
-      const { data } = await axios.get(
-        "http://localhost:5000/api/services/recent-view",
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      console.log(data)
-      return data;
-    } catch (error) {
-      return rejectWithValue(error.response?.data?.message || "Fetch recent viewed failed");
-    }
-  }
-);
 
 // Fetch Popular Services
 export const populerService = createAsyncThunk(
@@ -158,7 +140,7 @@ const serviceSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Add Service
+      // add service for provider
       .addCase(addService.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -173,7 +155,7 @@ const serviceSlice = createSlice({
         state.error = action.payload;
       })
 
-      // Fetch All Services
+      // fetch all services
       .addCase(fetchAllService.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -188,7 +170,7 @@ const serviceSlice = createSlice({
         state.error = action.payload;
       })
 
-      // Fetch All Services
+      // fetch all provider services
       .addCase(fetchProviderAllService.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -203,7 +185,7 @@ const serviceSlice = createSlice({
         state.error = action.payload;
       })
 
-      // Fetch Single Service
+      // fetch single service
       .addCase(fetchSingleService.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -218,7 +200,7 @@ const serviceSlice = createSlice({
         state.error = action.payload;
       })
 
-      // Edit Service
+      // edit service
       .addCase(editService.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -234,7 +216,7 @@ const serviceSlice = createSlice({
         state.error = action.payload;
       })
 
-      // Delete Service
+      // delete service
       .addCase(deleteService.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -249,22 +231,7 @@ const serviceSlice = createSlice({
         state.error = action.payload;
       })
 
-      // Viewed Services
-      .addCase(viewedService.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(viewedService.fulfilled, (state, action) => {
-        state.loading = false;
-        state.recentView = action.payload.service;
-        state.message = action.payload.message;
-      })
-      .addCase(viewedService.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      })
-
-      // Popular Services
+      // populer services
       .addCase(populerService.pending, (state) => {
         state.loading = true;
         state.error = null;

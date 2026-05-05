@@ -13,25 +13,24 @@ function Service() {
   const dispatch = useDispatch();
   const [openMenuId, setOpenMenuId] = useState(null); 
 
-  // Redux state থেকে service data নিচ্ছি
+  // provider services
   const { providerServics = [], loading, error } = useSelector(
     (state) => state.service || {}
   );
 
-  console.log(providerServics)
 
-
-  // Fetch all services on component mount
+  // fetch all provider services
   useEffect(() => {
     dispatch(fetchProviderAllService())
       .unwrap()
       .catch((err) => console.error("Failed to fetch services:", err));
   }, [dispatch]);
 
+  // handle delete
   const handleDelete = (id) => {
     dispatch(deleteService({ id }));
   };
-
+// toggle menu
   const toggleMenu = (e, id) => {
     e.stopPropagation();
     setOpenMenuId((prev) => (prev === id ? null : id));

@@ -5,14 +5,14 @@ const authMiddleware = require("../middleware/authMiddleware");
 const Service = require("../models/serviceModel");
 const User = require("../models/authModels");
 
-// Add Service (Provider) 
+// add service for provider
 router.post("/add", authMiddleware, upload.single("image"), async (req, res) => {
   try {
-    // Only Provider can add service
+    // provider role check
     if (req.user.role !== "Provider") {
       return res.status(403).json({ message: "Access denied" });
     }
-
+    // service data
     const { title, description, location, availability, price, category } = req.body;
     const image = req.file ? req.file.path : null;
 
@@ -20,6 +20,7 @@ router.post("/add", authMiddleware, upload.single("image"), async (req, res) => 
       return res.status(400).json({ message: "All fields are required" });
     }
 
+    // create new service
     const newService = new Service({
       title,
       provider: req.user.userId,
@@ -42,7 +43,7 @@ router.post("/add", authMiddleware, upload.single("image"), async (req, res) => 
   }
 });
 
-//Get All Services 
+//get all services
 router.get("/services", async (req, res) => {
   try {
     const services = await Service.find()
@@ -56,17 +57,17 @@ router.get("/services", async (req, res) => {
   }
 });
 
-//  Get All Services for provider 
+//  get all service for provider
 router.get("/provider", authMiddleware, async (req, res) => {
   try {
-    //  Login করা provider-এর ID
+    // userid by token header
     const providerId = req.user.userId;
 
     if (!providerId) {
       return res.status(401).json({ message: "Unauthorized: Provider ID missing" });
     }
 
-    // শুধু ওই provider-এর service fetch করা হচ্ছে
+    // fetch all services by providerid
     const services = await Service.find({ provider: providerId })
       .populate("provider", "name email avatar")
       .sort({ createdAt: -1 });
@@ -82,18 +83,15 @@ router.get("/provider", authMiddleware, async (req, res) => {
 });
 
 
-//  Get Single Service Details
+//  get single service
 router.get("/service/:id", async (req, res) => {
   try {
     const { id } = req.params;
+    // find service by id
     const service = await Service.findById(id).populate("provider", "name  email avatar");
     if (!service) {
       return res.status(404).json({ message: "Service not found" });
     }
-
-    // Increase viewsCount
-    service.viewsCount += 1;
-    await service.save();
 
     res.status(200).json({ message: "Service details fetched", service: service });
   } catch (error) {
@@ -102,25 +100,26 @@ router.get("/service/:id", async (req, res) => {
   }
 });
 
-//  Edit Service (Provider) 
+//  edit service for provider
 router.put("/services/:id", authMiddleware, upload.single("image"), async (req, res) => {
   try {
     const userId = req.user.userId;
     const user = await User.findById(userId);
-
+    // role chack
     if (user.role !== "Provider") {
       return res.status(403).json({ message: "Access denied" });
     }
-
+    // service id
     const { id } = req.params;
     const service = await Service.findById(id);
     if (!service) {
       return res.status(404).json({ message: "Service not found" });
     }
-
+    // updated data
     const { title, description, location, availability, price, category } = req.body;
     const image = req.file ? req.file.filename : service.image;
 
+    // update service
     service.title = title || service.title;
     service.description = description || service.description;
     service.location = location || service.location;
@@ -128,7 +127,7 @@ router.put("/services/:id", authMiddleware, upload.single("image"), async (req, 
     service.price = price || service.price;
     service.serviceCategory = category || service.serviceCategory;
     service.image = image;
-
+    // save
     await service.save();
 
     res.status(200).json({ success: true, message: "Service updated successfully", service });
@@ -138,22 +137,23 @@ router.put("/services/:id", authMiddleware, upload.single("image"), async (req, 
   }
 });
 
-//  Delete Service (Provider)
+//  delete service provider
 router.delete("/delete-service/:id", authMiddleware, async (req, res) => {
   try {
     const userId = req.user.userId;
     const user = await User.findById(userId);
-
+    // role check
     if (user.role !== "Provider") {
       return res.status(403).json({ message: "Access denied" });
     }
 
+    // find service 
     const { id } = req.params;
     const service = await Service.findById(id);
     if (!service) {
       return res.status(404).json({ message: "Service not found" });
     }
-
+    // delete
     await Service.findByIdAndDelete(id);
     res.status(200).json({ message: "Service deleted successfully" });
   } catch (error) {
@@ -163,25 +163,12 @@ router.delete("/delete-service/:id", authMiddleware, async (req, res) => {
 });
 
 
-
-// Recent Viewed Services (Customer) 
-router.get("/recent-view", authMiddleware, async (req, res) => {
-  try {
-    const userId = req.user.userId;
-    const user = await User.findById(userId).populate("recentViews");
-
-    res.status(200).json({ message: "Recent viewed services fetched", service: user.recentViews });
-  } catch (error) {
-    console.error("Error fetching recent views:", error);
-    res.status(500).json({ message: "Server error" });
-  }
-});
-
-//  Popular Services
+//  populer service
 router.get("/popular-services", async (req, res) => {
   try {
+    // find service rating
     const services = await Service.find()
-      .sort({ viewsCount: -1, averageRating: -1 })
+      .sort({ averageRating: -1 })
       .limit(10)
       .populate("provider", "name email");
 

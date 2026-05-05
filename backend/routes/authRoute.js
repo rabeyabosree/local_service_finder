@@ -15,31 +15,31 @@ router.post("/register", async (req, res) => {
   try {
     const { name, email, password, role } = req.body;
 
-    //  Check required fields
+    //  check required fields
     if (!name || !email || !password) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
-    //  Check if user already exists
+    // exist uder
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ message: "Email already registered" });
     }
 
-    //  Hash password
+    //  hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    //  Create new user
+    // create new user
     const newUser = new User({
       name,
       email,
       password: hashedPassword,
-      role: role || "Customer", // default role = Customer
+      role: role || "Customer",
     });
 
     await newUser.save();
 
-    // Send response
+    // send res
     res.status(201).json({
       message: "User registered successfully",
       user: {
@@ -61,31 +61,31 @@ router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Field check
+    // field check
     if (!email || !password) {
       return res.status(400).json({ message: "Email and password are required" });
     }
 
-    // User খুঁজে বের করো
+    // find user
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // Password match করো
+    // match password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
-    // JWT Token generate করো
+    // JWT token genarete
     const token = jwt.sign(
       { userId: user._id, role: user.role },
       JWT_SECRET,
-      { expiresIn: "7d" } // 7 days valid
+      { expiresIn: "1d" }
     );
 
-    // Response পাঠাও
+    // res
     res.status(200).json({
       message: "Login successful",
       token,
@@ -115,9 +115,9 @@ router.get("/profile", authMiddleware, async (req, res) => {
 
     if (!user) return res.status(404).json({ message: "User not found" });
 
-    // Role-based data
+    // role based
     if (role === "Provider") {
-      // Provider-specific fields
+      // provider spesific 
       const providerData = {
         name: user.name,
         email: user.email,
@@ -133,7 +133,7 @@ router.get("/profile", authMiddleware, async (req, res) => {
       return res.status(200).json({ user: providerData });
     }
 
-    // Default: Customer
+    // customer (default)
     const customerData = {
       _id: user._id,
       name: user.name,
@@ -154,25 +154,25 @@ router.get("/profile", authMiddleware, async (req, res) => {
 })
 
 
-// Update logged-in user profile (img, fields)
+// Update logged-in user profile 
 router.put("/profile", authMiddleware, upload.single("avatar"), async (req, res) => {
   try {
     const userId = req.user.userId;
     const { name, email, phone, service, location, availability, bio } = req.body;
 
+    // updated data
     const updateData = { name, email, phone, service, availability, location, bio };
 
-    // যদি image upload করা হয়
+    // img file set
     if (req.file && req.file.path) {
-      updateData.avatar = req.file.path; // Cloudinary URL
+      updateData.avatar = req.file.path;
     }
-
+    // update user data
     const updatedUser = await User.findByIdAndUpdate(
       userId,
       { $set: updateData },
       { new: true, runValidators: true }
     ).select("-password -resetCode -expireResetCode");
-    console.log(updateData)
 
     res.status(200).json({
       success: true,
@@ -190,20 +190,22 @@ router.put("/profile", authMiddleware, upload.single("avatar"), async (req, res)
 router.post("/forgot-password", async (req, res) => {
   try {
     const { email } = req.body
-
+    // find user
     const user = await User.findOne({ email })
     if (!user) {
       return res.status(400).json({ message: "User Not found" })
     }
 
+    // generate reset code
     const resetCode = Math.floor(100000 + Math.random() * 900000).toString()
     const expireResetCode = Date.now() + 15 * 60 * 1000
 
+    // send otp to user
     user.resetCode = resetCode;
     user.expireResetCode = expireResetCode
 
     await user.save()
-
+    // create nodemailor transport
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
@@ -211,7 +213,7 @@ router.post("/forgot-password", async (req, res) => {
         pass: process.env.EMAIL_PASS
       }
     })
-
+    // send otp to email by transport
     transporter.sendMail({
       from: process.env.EMAIL_USER,
       to: user.email,
@@ -232,14 +234,16 @@ router.post("/forgot-password", async (req, res) => {
 router.post("/verify-otp", async (req, res) => {
   try {
     const { email, resetCode } = req.body
+    // find user
     const user = await User.findOne({ email })
     if (!user) {
       return res.status(400).json({ message: "User Not found" })
     }
-
+    // match otp
     if (user.resetCode !== resetCode) {
       return res.status(400).json({ message: "Invalid Reset code" })
     }
+    // check otp expireation
     if (user.expireResetCode < Date.now()) {
       return res.status(400).json({ message: "Expired Reset code" })
     }
@@ -261,6 +265,7 @@ router.post("/reset-password", async (req, res) => {
       return res.status(400).json({ message: "User Not found" })
     }
 
+    // hash new password
     const hashPassword = await bcrypt.hash(newPassword, 10)
     user.password = hashPassword
     user.resetCode = null

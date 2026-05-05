@@ -15,6 +15,7 @@ function ResetPassword() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
 
+  // handle reset submit
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (newPassword !== confirmPassword) {
@@ -35,7 +36,7 @@ function ResetPassword() {
       <div className='max-w-sm w-full bg-white p-8 rounded-2xl text-center'>
         <h1 className='text-2xl font-bold text-green-800 mb-2'>Reset Password</h1>
         <p className='text-gray-400 text-sm mb-6'>Enter your new password below</p>
-
+        {/* set new password form */}
         <form onSubmit={handleSubmit} className='flex flex-col space-y-4'>
           <input
             type="password"

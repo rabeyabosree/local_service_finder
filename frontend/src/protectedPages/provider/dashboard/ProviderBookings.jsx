@@ -8,36 +8,34 @@ function ProviderBookings() {
   const navigate = useNavigate();
   const dispatch = useDispatch()
 
-   const { providerBookings  = [], error} = useSelector((state) => state.booking)
+  const { providerBookings = [], error } = useSelector((state) => state.booking)
 
+  // fetch all bookigns
   useEffect(() => {
-      dispatch(getAllBookings())
-    }, [dispatch]);
-  
- 
-  const [filter, setFilter] = useState("All");
-  console.log(providerBookings )
+    dispatch(getAllBookings())
+  }, [dispatch]);
 
- 
-  // Status update handler
+  const [filter, setFilter] = useState("All");
+
+  // status update
   const handleStatusChange = (id, newStatus) => {
-  dispatch(updateStatuss({id, status: newStatus}))
+    dispatch(updateStatuss({ id, status: newStatus }))
   };
 
-  // Filtered bookings based on filter state
+  // filerting booking by status
   const filteredBookings =
     filter === "All"
-      ? providerBookings 
-      : providerBookings .filter((b) => b.status.toLowerCase() === filter.toLowerCase());
+      ? providerBookings
+      : providerBookings.filter((b) => b.status.toLowerCase() === filter.toLowerCase());
 
   return (
     <div>
       <div className="bg-white p-6 rounded-xl shadow overflow-x-auto">
-        {/* Header + Filter */}
+        {/* header and filter*/}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-3">
           <h3 className="text-lg font-semibold">Provider Bookings</h3>
 
-          {/* Filter Dropdown */}
+          {/* filter dropdoem */}
           <div>
             <label htmlFor="filter" className="mr-2 text-sm font-medium">
               Filter:
@@ -56,8 +54,9 @@ function ProviderBookings() {
           </div>
         </div>
 
-        {/* Table */}
+        {/* table */}
         <table className="min-w-full text-sm text-left">
+          {/* table header */}
           <thead className="bg-gray-100 text-gray-600 uppercase text-xs">
             <tr>
               <th className="px-6 py-3">Customer</th>
@@ -67,6 +66,7 @@ function ProviderBookings() {
               <th className="px-6 py-3">Action</th>
             </tr>
           </thead>
+          {/* table body */}
           <tbody className="divide-y divide-gray-200">
             {filteredBookings.length > 0 ? (
               filteredBookings.map((booking) => (
@@ -81,13 +81,12 @@ function ProviderBookings() {
                         handleStatusChange(booking._id, e.target.value)
                       }
                       onClick={(e) => e.stopPropagation()}
-                      className={`px-3 py-1 rounded-lg text-sm cursor-pointer ${
-                        booking.status === "Pending"
-                          ? "bg-amber-100 text-amber-800"
-                          : booking.status === "Accepted"
+                      className={`px-3 py-1 rounded-lg text-sm cursor-pointer ${booking.status === "Pending"
+                        ? "bg-amber-100 text-amber-800"
+                        : booking.status === "Accepted"
                           ? "bg-blue-100 text-blue-800"
                           : "bg-green-100 text-green-800"
-                      }`}
+                        }`}
                     >
                       <option value="Pending">Pending</option>
                       <option value="confirmed">confirmed</option>

@@ -1,55 +1,46 @@
 let onlineUsers = {};
 
 const initSocket = (io) => {
-    global.io = io;
     global.onlineUsers = onlineUsers;
+    global.io = io;
 
     io.on("connection", (socket) => {
-        console.log("connected:", socket.id);
 
-        // JOIN USER
+        // join user
         socket.on("join", (userId) => {
-            onlineUsers[userId] = socket.id;
+            if (!userId) return;
 
+            onlineUsers[userId] = socket.id;
             io.emit("getOnlineUsers", Object.keys(onlineUsers));
         });
 
-        socket.on("join", (userId) => {
-            console.log("👤 JOIN EVENT:", userId);
-
-            onlineUsers[userId] = socket.id;
-
-            console.log("🌐 ONLINE USERS:", onlineUsers);
-
-            io.emit("getOnlineUsers", Object.keys(onlineUsers));
-        });
-
-        // TEXT + IMAGE MESSAGE (fallback support)
+        // send message text and image
         socket.on("sendMessage", (data) => {
-            const receiverSocket = onlineUsers[data.receiverId];
 
+            const receiverSocket = onlineUsers[data.receiverId];
             if (receiverSocket) {
                 io.to(receiverSocket).emit("receiveMessage", data);
             }
 
-            // sender sync (optional but recommended)
+            // sender sync
             const senderSocket = onlineUsers[data.senderId];
-
             if (senderSocket) {
                 io.to(senderSocket).emit("receiveMessage", data);
             }
         });
 
-        // SEEN
+        // seen message
         socket.on("seenMessage", ({ senderId, conversationId }) => {
-            const senderSocket = onlineUsers[senderId];
 
+            const senderSocket = onlineUsers[senderId];
             if (senderSocket) {
-                io.to(senderSocket).emit("messageSeen", { conversationId });
+                io.to(senderSocket).emit("messageSeen", {
+                    conversationId,
+                });
             }
         });
 
-        // DISCONNECT
+        // disconnect
         socket.on("disconnect", () => {
             for (let userId in onlineUsers) {
                 if (onlineUsers[userId] === socket.id) {

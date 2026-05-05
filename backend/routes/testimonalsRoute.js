@@ -4,7 +4,7 @@ const authMiddleware = require("../middleware/authMiddleware");
 const Testimonals = require("../models/testimonalsModel");
 
 
-// Add testimonial (customer)
+// add testimional for customer
 router.post("/add", authMiddleware, async (req, res) => {
   try {
     const { rating, comment, serviceId } = req.body;
@@ -36,17 +36,17 @@ router.post("/add", authMiddleware, async (req, res) => {
 });
 
 
-// Get all testimonials per service
+// get all testimonals by service
 router.get("/:serviceId", async (req, res) => {
   try {
     const { serviceId } = req.params;
 
-    // Check if serviceId provided
+    // check service
     if (!serviceId) {
       return res.status(400).json({ message: "Service ID is required" });
     }
 
-    // Find all testimonials linked to this service
+    // find all testimonals by serviceid
     const testimonials = await Testimonals.find({ serviceId })
       .populate("userId", "name email avatar") // user info show করবে
       .sort({ createdAt: -1 }); // latest first
@@ -61,28 +61,28 @@ router.get("/:serviceId", async (req, res) => {
   }
 });
 
-// ✅ Edit Testimonial
+// edit testimonals for customer
 router.put("/edit/:id", authMiddleware, async (req, res) => {
   try {
-    const { id } = req.params; // testimonial ID
+    const { id } = req.params;
     const { rating, comment } = req.body;
     const userId = req.user.userId;
-
+    // find testimonal by user id and testimonal id
     const testimonial = await Testimonals.findById(id);
 
     if (!testimonial) {
       return res.status(404).json({ message: "Testimonial not found" });
     }
 
-    // ✅ শুধু নিজের testimonial এডিট করতে পারবে
+    // userid validation check
     if (testimonial.userId.toString() !== userId) {
       return res.status(403).json({ message: "Not authorized to edit this testimonial" });
     }
 
-    // Update fields
+    // update testimonal
     if (rating) testimonial.rating = rating;
     if (comment) testimonial.comment = comment;
-
+    // save
     await testimonial.save();
 
     res.status(200).json({
@@ -95,23 +95,23 @@ router.put("/edit/:id", authMiddleware, async (req, res) => {
   }
 });
 
-// ✅ Delete Testimonial
+// delete testimonal
 router.delete("/delete/:id", authMiddleware, async (req, res) => {
   try {
     const { id } = req.params;
     const userId = req.user.userId;
-    console.log(id)
+    // find testimonal by id
     const testimonial = await Testimonals.findById(id);
 
     if (!testimonial) {
       return res.status(404).json({ message: "Testimonial not found" });
     }
 
-    // ✅ শুধু নিজের testimonial ডিলিট করতে পারবে
+    //  chcek user validation
     if (testimonial.userId.toString() !== userId) {
       return res.status(403).json({ message: "Not authorized to delete this testimonial" });
     }
-
+    // delete
     await testimonial.deleteOne();
 
     res.status(200).json({ message: "Testimonial deleted successfully", id: id });

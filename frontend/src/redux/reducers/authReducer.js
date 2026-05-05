@@ -12,7 +12,7 @@ const initialState = {
   message: null
 };
 
-// Register Thunk
+// Register 
 export const authRegister = createAsyncThunk(
   "auth/register",
   async (authData, { rejectWithValue }) => {
@@ -30,7 +30,7 @@ export const authRegister = createAsyncThunk(
   }
 );
 
-// Login Thunk
+// Login 
 export const authLogin = createAsyncThunk(
   "auth/login",
   async (credentials, { rejectWithValue }) => {
@@ -48,7 +48,7 @@ export const authLogin = createAsyncThunk(
   }
 );
 
-//  Profile Thunk
+// get Profile
 export const authProfile = createAsyncThunk(
   "auth/profile",
   async (_, { rejectWithValue }) => {
@@ -71,7 +71,7 @@ export const authProfile = createAsyncThunk(
   }
 );
 
-//  Profile Thunk
+// update Profile 
 export const updateProfile = createAsyncThunk(
   "auth/update-profile",
   async (profileData, { rejectWithValue }) => {
@@ -152,7 +152,7 @@ export const resetPassword = createAsyncThunk(
 
 
 
-// 🌟 Auth Slice
+// Auth Slice
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -174,7 +174,7 @@ const authSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    // REGISTER
+    // register
     builder
       .addCase(authRegister.pending, (state) => {
         state.loading = true;
@@ -195,7 +195,7 @@ const authSlice = createSlice({
         state.error = action.payload;
       });
 
-    // LOGIN
+    // login
     builder
       .addCase(authLogin.pending, (state) => {
         state.loading = true;
@@ -215,7 +215,7 @@ const authSlice = createSlice({
         state.error = action.payload;
       });
 
-    //  PROFILE
+    //  profile
     builder
       .addCase(authProfile.pending, (state) => {
         state.loading = true;
@@ -231,7 +231,7 @@ const authSlice = createSlice({
         state.error = action.payload;
       });
 
-    // UPDATE PROFILE
+    // update
     builder
       .addCase(updateProfile.pending, (state) => {
         state.loading = true;
@@ -251,7 +251,7 @@ const authSlice = createSlice({
         state.error = action.payload;
       });
 
-    //  Forgot password
+    //  forgot password
     builder
       .addCase(forgotpassword.pending, (state) => {
         state.loading = true;

@@ -20,7 +20,7 @@ const serviceSchema = new mongoose.Schema(
             required: true,
         },
         availability: {
-            type: String, // e.g., "9am-5pm" or array of days
+            type: String,
             required: true,
         },
         price: {
@@ -28,28 +28,23 @@ const serviceSchema = new mongoose.Schema(
             required: true,
         },
         image: {
-            type: String, // image URL or path
+            type: String,
             required: true,
         },
         category: {
-            type: String, // e.g., "Electrician", "Plumber"
+            type: String, 
              
         },
        
         averageRating: {
             type: Number,
             default: 0,
-        },
-        viewsCount: {
-            type: Number,
-            default: 0
-        },
-       
+        }
     },
     { timestamps: true }
 );
 
-// Optional: pre-save middleware to calculate average rating
+// pre save avg rating
 serviceSchema.methods.calculateAverageRating = function () {
     if (this.reviews.length === 0) {
         this.averageRating = 0;

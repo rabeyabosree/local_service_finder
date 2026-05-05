@@ -37,6 +37,7 @@ function SingleService() {
     }
   }, [dispatch, id]);
 
+  // avg rating
   const averageRating =
     testimonials.length > 0
       ? testimonials.reduce((sum, t) => sum + t.rating, 0) /
@@ -59,7 +60,7 @@ function SingleService() {
 
   if (!singleService) return null;
 
-  // naviaget message page
+  // naviaget message 
   const handleMessage = async () => {
     if (!user?._id) return alert("Please login first");
 
@@ -99,10 +100,10 @@ function SingleService() {
 
       <div className="max-w-4xl mx-auto space-y-10">
 
-        {/* SERVICE SECTION */}
+        {/*service*/}
         <div className="grid md:grid-cols-2 gap-8">
 
-          {/* IMAGE */}
+          {/* img */}
           <div className="bg-violet-50 rounded-2xl overflow-hidden">
             <img
               src={singleService?.image || "/no-image.png"}
@@ -111,10 +112,10 @@ function SingleService() {
             />
           </div>
 
-          {/* INFO */}
+          {/* info */}
           <div className="space-y-5">
 
-            {/* PROVIDER */}
+            {/* provider */}
             <div className="flex items-center gap-3">
               <img
                 src={singleService?.provider?.avatar || "/user.png"}
@@ -130,7 +131,7 @@ function SingleService() {
               </div>
             </div>
 
-            {/* TITLE */}
+            {/* title */}
             <h1 className="text-xl font-semibold text-gray-800">
               {singleService?.title}
             </h1>
@@ -143,7 +144,7 @@ function SingleService() {
               {singleService?.description}
             </p>
 
-            {/* DETAILS */}
+            {/* details */}
             <div className="bg-yellow-50 p-3 rounded-lg text-sm text-gray-600 space-y-2">
               <p className="flex items-center gap-2">
                 <MapPin size={16} className="text-yellow-500" />
@@ -156,7 +157,7 @@ function SingleService() {
               </p>
             </div>
 
-            {/* PRICE + RATING */}
+            {/*price and rating */}
             <div className="flex items-center justify-between">
               <div className="flex gap-1 text-yellow-400">
                 {[...Array(5)].map((_, i) => (
@@ -177,7 +178,7 @@ function SingleService() {
               </p>
             </div>
 
-            {/* BUTTONS */}
+            {/* actions btn */}
             <div className="flex gap-3">
               <button
                 onClick={handleBooking}
@@ -197,7 +198,7 @@ function SingleService() {
           </div>
         </div>
 
-        {/* REVIEWS SECTION (LEFT aligned under service) */}
+        {/* review section */}
         <div className="max-w-3xl">
           <h3 className="text-lg font-semibold text-gray-800 mb-4">
             Customer Reviews

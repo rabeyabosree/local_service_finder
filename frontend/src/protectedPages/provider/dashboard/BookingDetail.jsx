@@ -11,6 +11,7 @@ function BookingDetail() {
     (state) => state.booking
   );
 
+  // fetch provider bookings
   useEffect(() => {
     if (id) {
       dispatch(providerBooking({ bookingId: id }));
@@ -42,7 +43,7 @@ function BookingDetail() {
       <h2 className="text-2xl font-semibold mb-4 text-gray-800">
         Booking Details
       </h2>
-
+      {/* booking details data */}
       <div className="space-y-2 text-gray-700">
         <p>
           <span className="font-semibold">Service:</span>{" "}

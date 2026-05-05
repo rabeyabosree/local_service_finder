@@ -9,9 +9,9 @@ function VerifyOtp() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const email = location.state?.email; // ✅ Forgot Password থেকে আসা email
+  const email = location.state?.email; 
 
-  // OTP Verify Handler
+  // verifyy otp handler
   const handleVerify = async (e) => {
     e.preventDefault();
     try {
@@ -27,7 +27,7 @@ function VerifyOtp() {
     }
   };
 
-  // Input change
+  // input chamge
   const handleChange = (element, index) => {
     const value = element.value.replace(/[^0-9]/g, "");
     if (!value) return;
@@ -39,7 +39,7 @@ function VerifyOtp() {
     if (index < 5) inputRef.current[index + 1].focus();
   };
 
-  // Backspace handle
+  // backspace handler
   const handleKeyDown = (e, index) => {
     if (e.key === "Backspace" && otp[index] === "" && index > 0) {
       inputRef.current[index - 1].focus();
@@ -57,6 +57,7 @@ function VerifyOtp() {
             Enter the 6-digit OTP sent to your email
           </p>
 
+          {/* input otp */}
           <div className="flex justify-center gap-3 mb-6">
             {otp.map((digit, index) => (
               <input
@@ -71,7 +72,7 @@ function VerifyOtp() {
               />
             ))}
           </div>
-
+          {/* verify otp btn */}
           <button
             type="submit"
             className="bg-green-500 text-white text-lg w-full px-6 py-2 rounded-2xl hover:bg-green-600 transition"

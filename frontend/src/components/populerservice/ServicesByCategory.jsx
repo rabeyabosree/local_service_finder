@@ -3,8 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { FaStar } from "react-icons/fa";
 
 function ServicesByCategory() {
-  const { service } = useParams(); // URL থেকে category নাম আসবে
-  console.log("service", service)
+  const { service } = useParams();
 
   const services = [
     {
@@ -67,7 +66,7 @@ function ServicesByCategory() {
       <h1 className="text-2xl font-bold text-gray-800 mb-8">
         {service} Services
       </h1>
-
+      {/* service by category */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {serviceByCategory.map((ser) => (
           <div
@@ -82,7 +81,7 @@ function ServicesByCategory() {
             <h2 className="text-lg font-semibold text-gray-800">{ser.name}</h2>
             <p className="text-violet-600 text-sm mb-2">{ser.service}</p>
 
-            {/* Rating */}
+            {/* rating */}
             <div className="flex gap-1 mb-2">
               {[...Array(5)].map((_, i) => (
                 <FaStar

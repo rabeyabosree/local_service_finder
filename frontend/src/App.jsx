@@ -23,16 +23,30 @@ import LoginPage from './pages/auth/LoginPage';
 import ForgotPassword from './pages/auth/ForgotPassword';
 import VerifyOtp from './pages/auth/VerifyOtp';
 import ResetPassword from './pages/auth/ResetPassword';
-import AddServices from './protectedPages/provider/dashboard/AddServices';
 import AuthCustomer from './pages/auth/AuthCustomer';
 import ContactPage from './pages/contact/ContactPage';
 import AllServices from './pages/services/AllServices';
 import ChatPage from './pages/chating/ChatPage';
 import Chatlist from './pages/chating/Chatlist';
+import { useEffect } from 'react';
+import socketService from './socket/Socket';
+import useSocket from './socket/useSocket';
+
+
 
 
 function App() {
+  const user = JSON.parse(localStorage.getItem("user"));
 
+  useSocket({ userId: user._id });
+  
+  useEffect(() => {
+    if (!user?._id) return;
+    socketService.connect(user._id);
+    return () => {
+      socketService.disconnect();
+    };
+  }, [user?._id]);
 
   return (
     <Router>

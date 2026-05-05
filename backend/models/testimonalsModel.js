@@ -10,7 +10,7 @@ const testimonialSchema = new mongoose.Schema(
         },
         serviceId: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "Service",   // 🔸 প্রতিটি testimonial কোন service এর জন্য সেটা
+            ref: "Service",  
             required: true,
         },
         rating: {

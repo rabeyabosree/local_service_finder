@@ -20,7 +20,7 @@ function ServiceEdit() {
 
   const { singleService, loading, error } = useSelector((state) => state.service || {});
 
-  // Pre-fill form state
+  // pre fill form state
   useEffect(() => {
     if (!singleService || singleService._id !== id) {
       dispatch(fetchSingleService(id))
@@ -50,12 +50,12 @@ function ServiceEdit() {
     }
   }, [dispatch, id, singleService]);
 
-
+  // handle change
   const handleChange = (e) => {
     const { name, value } = e.target;
     setServiceData((prev) => ({ ...prev, [name]: value }));
   };
-
+  // handle sumbit
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -68,6 +68,7 @@ function ServiceEdit() {
     }
   };
 
+  // loading
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -76,11 +77,11 @@ function ServiceEdit() {
       </div>
     );
   }
-
+  // error
   if (error) {
     return (
       <div className="text-center py-20 text-red-600">
-         {error || "Failed to load service."}
+        {error || "Failed to load service."}
       </div>
     );
   }
@@ -88,7 +89,7 @@ function ServiceEdit() {
   return (
     <div className="max-w-3xl mx-auto bg-white shadow rounded-lg p-6 mt-8">
       <h2 className="text-2xl font-bold mb-6">Edit Service</h2>
-
+      {/* update service form */}
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="block mb-1 font-medium">Title</label>

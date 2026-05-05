@@ -6,7 +6,8 @@ import { addService } from "../../../redux/reducers/serviceReducer";
 function AddService() {
   const dispatch = useDispatch();
   const { loading, error, message } = useSelector((state) => state.service || {});
-
+  
+  // service data state
   const [serviceData, setServiceData] = useState({
     title: "",
     image: null,
@@ -16,17 +17,17 @@ function AddService() {
     price: "",
     availability: "",
   });
-  
 
+  // categories
   const categories = ["Plumber", "Electrician", "Tutor", "Cleaner", "Other"];
 
-  // 🟡 Handle Text Inputs
+  // handle text input
   const handleChange = (e) => {
     const { name, value } = e.target;
     setServiceData((prev) => ({ ...prev, [name]: value }));
   };
 
-  //  Handle Image Upload
+  //  handle img upload
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -34,11 +35,11 @@ function AddService() {
     }
   };
 
-  // Submit Form
+  // submit form
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Convert data to FormData for file upload
+    // form data
     const formData = new FormData();
     formData.append("title", serviceData.title);
     formData.append("category", serviceData.category);
@@ -50,13 +51,8 @@ function AddService() {
       formData.append("image", serviceData.image);
     }
 
-    // Dispatch to Redux (example)
+    // dispatch
     dispatch(addService(formData));
-
-    console.log("Submitted Service Data:", formData);
-    for (let [key, val] of formData.entries()) {
-      console.log(`${key}:`, val);
-    }
   };
 
   return (
@@ -67,7 +63,7 @@ function AddService() {
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-5 ">
-          {/* Title */}
+          {/* ttile */}
           <div>
             <label className="block text-gray-700 font-semibold mb-1">
               Service Title
@@ -83,7 +79,7 @@ function AddService() {
             />
           </div>
 
-          {/* Image Upload */}
+          {/* img */}
           <div>
             <label className="block text-gray-700 font-semibold mb-1">
               Service Image
@@ -108,7 +104,7 @@ function AddService() {
             )}
           </div>
 
-          {/* Category */}
+          {/*category */}
           <div>
             <label className="block text-gray-700 font-semibold mb-1">
               Category
@@ -129,7 +125,7 @@ function AddService() {
             </select>
           </div>
 
-          {/* Description */}
+          {/*description */}
           <div>
             <label className="block text-gray-700 font-semibold mb-1">
               Description
@@ -145,7 +141,7 @@ function AddService() {
             ></textarea>
           </div>
 
-          {/* Location */}
+          {/* lcoation*/}
           <div>
             <label className="block text-gray-700 font-semibold mb-1">
               Location
@@ -161,7 +157,7 @@ function AddService() {
             />
           </div>
 
-          {/* Availability */}
+          {/* availabiity */}
           <div>
             <label className="block text-gray-700 font-semibold mb-1">
               Availability (in hours)
@@ -177,7 +173,7 @@ function AddService() {
             />
           </div>
 
-          {/* Price */}
+          {/* price */}
           <div>
             <label className="block text-gray-700 font-semibold mb-1">
               Price (৳)
@@ -193,7 +189,7 @@ function AddService() {
             />
           </div>
 
-          {/* Submit */}
+          {/* submit */}
           <div className="text-end pt-2">
             <button
               type="submit"
@@ -204,7 +200,7 @@ function AddService() {
             </button>
           </div>
 
-          {/* Error / Message */}
+          {/* alert handling */}
           {error && <p className="text-red-600 text-sm text-center">{error}</p>}
           {message && <p className="text-green-600 text-sm text-center">{message}</p>}
         </form>

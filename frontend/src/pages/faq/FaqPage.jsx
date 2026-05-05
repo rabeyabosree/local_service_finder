@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 
 function FaqPage() {
+
+  // dummy faq data
   const faqs = [
     {
       id: 1,
@@ -42,6 +44,7 @@ function FaqPage() {
 
   const [openId, setOpenId] = useState(null);
 
+  // toggle btn
   const toggleFaq = (id) => {
     setOpenId(openId === id ? null : id);
   };
@@ -52,13 +55,14 @@ function FaqPage() {
         Frequently Asked Questions
       </h1>
 
+      {/* faqs */}
       <div className="space-y-4">
         {faqs.map((faq) => (
           <div
             key={faq.id}
             className="border border-gray-200 rounded-xl shadow-md overflow-hidden transition-all duration-300"
           >
-            {/* Question */}
+            {/* question */}
             <button
               onClick={() => toggleFaq(faq.id)}
               className="w-full flex justify-between items-center p-5 text-left font-semibold text-gray-800 hover:bg-[#EAF3F5] transition-colors duration-200"
@@ -69,11 +73,10 @@ function FaqPage() {
               </span>
             </button>
 
-            {/* Answer */}
+            {/* answer */}
             <div
-              className={`px-5 pb-5 text-gray-700 text-sm sm:text-base transition-all duration-300 ${
-                openId === faq.id ? "max-h-96 opacity-100" : "max-h-0 opacity-0 overflow-hidden"
-              }`}
+              className={`px-5 pb-5 text-gray-700 text-sm sm:text-base transition-all duration-300 ${openId === faq.id ? "max-h-96 opacity-100" : "max-h-0 opacity-0 overflow-hidden"
+                }`}
             >
               {faq.answer}
             </div>

@@ -7,29 +7,32 @@ function BookingPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // service from localStorage
+  // service 
   const service = JSON.parse(localStorage.getItem("booking"));
 
+  // user
   const user = JSON.parse(localStorage.getItem("user"));
   const userId = user?._id;
 
   const [deliveryLocation, setDeliveryLocation] = useState("");
   const [locationConfirmed, setLocationConfirmed] = useState(false);
 
+  // profile data
   const profileData = JSON.parse(localStorage.getItem("profileData"));
   const profileLocation = profileData?.location;
 
+  // get profile from auth
   const handleGetProfileLocation = () => {
     setDeliveryLocation(profileLocation || "");
     setLocationConfirmed(true);
   };
-
+  // set profile location
   const handleConfirmLocation = () => {
     if (deliveryLocation.trim()) {
       setLocationConfirmed(true);
     }
   };
-
+  // handle place booking
   const handleConfirmBooking = async () => {
     const bookingData = {
       userId,
@@ -42,10 +45,7 @@ function BookingPage() {
 
     try {
       const res = await dispatch(bookService(bookingData)).unwrap();
-
-      navigate("/success", {
-        state: res,
-      });
+      navigate("/success", { state: res });
     } catch (err) {
       console.log("Booking error:", err);
     }
@@ -66,9 +66,9 @@ function BookingPage() {
         Booking Details
       </h2>
 
+      {/* booking form */}
       <div className="grid md:grid-cols-2 gap-6">
-
-        {/* LEFT - SERVICE INFO */}
+        {/* service info*/}
         <div className="space-y-4">
 
           <h3 className="text-lg font-semibold">
@@ -112,7 +112,7 @@ function BookingPage() {
 
         </div>
 
-        {/* RIGHT - LOCATION */}
+        {/* location */}
         <div>
 
           <h3 className="text-lg font-semibold mb-2">
@@ -147,10 +147,9 @@ function BookingPage() {
           </button>
 
         </div>
-
       </div>
 
-      {/* CONFIRM BUTTON */}
+      {/* confirm button */}
       <div className="flex justify-end">
         <button
           onClick={handleConfirmBooking}

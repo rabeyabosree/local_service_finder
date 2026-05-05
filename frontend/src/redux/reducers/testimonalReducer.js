@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-// Add testimonial 
+// add testimonial 
 export const addTestimonals = createAsyncThunk(
   "testimonial/add",
   async (testiData, { rejectWithValue }) => {
@@ -24,7 +24,7 @@ export const addTestimonals = createAsyncThunk(
   }
 );
 
-// Fetch testimonials for a service
+// fetch testimonials for a spesific service
 export const fetchTestimonials = createAsyncThunk(
   "testimonial/fetch",
   async (serviceId, { rejectWithValue }) => {
@@ -99,7 +99,7 @@ const testimonialSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    // Add testimonial
+    // add testimonal
     builder
       .addCase(addTestimonals.pending, (state) => {
         state.loading = true;
@@ -115,7 +115,7 @@ const testimonialSlice = createSlice({
         state.error = action.payload;
       });
 
-    // Fetch testimonials
+    // fetch testimonal
     builder
       .addCase(fetchTestimonials.pending, (state) => {
         state.loading = true;

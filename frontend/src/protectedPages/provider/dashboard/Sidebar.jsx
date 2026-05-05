@@ -12,11 +12,12 @@ function Sidebar() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  const handleLogout = ()=>{
+  // handle logout
+  const handleLogout = () => {
     dispatch(logout())
     navigate("/login")
   }
-
+  // sidebar menu
   const sidebarMenu = [
     { menu: "Dashboard", icon: <LuLayoutDashboard size={20} />, path: '/dashboard' },
     { menu: "Service", icon: <MdOutlineHomeRepairService size={20} />, path: '/dashboard/service' },
@@ -27,12 +28,12 @@ function Sidebar() {
 
   return (
     <div className="h-screen text-white flex flex-col justify-between p-4">
-      {/* Logo */}
+      {/* logo */}
       <div className="flex items-center gap-2 text-2xl font-bold mb-8">
         EasyFind <FcServices size={28} />
       </div>
 
-      {/* Sidebar Menu */}
+      {/* sidebar menu */}
       <nav className="flex flex-col gap-3 flex-1">
         {sidebarMenu.map((item) => (
           <Link
@@ -50,7 +51,7 @@ function Sidebar() {
         ))}
       </nav>
 
-      {/* Profile Section */}
+      {/* logout */}
       <button onClick={handleLogout} className="border-t border-gray-700 pt-4 ">
         Logout
       </button>
